@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliflar Intro Gallery</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: white; margin: 0; padding: 20px; }
+        h2 { text-align: center; color: #00ffff; letter-spacing: 2px; }
+        
+        /* Грид систем за мобилен */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #333;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+        }
+
+        .card:active { transform: scale(0.95); border-color: #00ffff; }
+
+        .thumb {
+            width: 100%;
+            height: 100px;
+            background: #222;
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+        }
+
+        .name { padding: 8px; font-size: 13px; text-align: center; font-weight: bold; }
+        
+        .copy-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00ffff;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            font-weight: bold;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>ELIFLAR INTROS</h2>
+    
+    <div class="gallery-grid">
+        <div class="card">
+            <img src="thumbnails/classic.jpg" class="thumb" alt="Classic">
+            <div class="name">Classic Imagery</div>
+            <button class="copy-btn" onclick="copyCode('intros/classic.html')">COPY CODE</button>
+        </div>
+
+        </div>
+
+    <div id="toast">CODE COPIED!</div>
+
+    <script>
+        async function copyCode(fileUrl) {
+            try {
+                // Влечење на кодот од GitHub
+                const response = await fetch(fileUrl);
+                const text = await response.text();
+                
+                // Копирање во меморија
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                
+                // Нотификација
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2000);
+            } catch (err) {
+                alert('Грешка: ' + err);
+            }
+        }
+    </script>
+</body>
+</html>
