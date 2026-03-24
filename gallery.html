@@ -5,47 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eliflar Intro Gallery</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: white; margin: 0; padding: 20px; }
-        h2 { text-align: center; color: #00ffff; letter-spacing: 2px; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #0a1f24; /* Eliflar темно сино-зелена */
+            color: #f0e6d2; /* Крем текст */
+            margin: 0; 
+            padding: 20px; 
+        }
         
-        /* Грид систем за мобилен */
+        h2 { 
+            text-align: center; 
+            color: #f7a033; /* Портокалова од логото */
+            letter-spacing: 3px; 
+            text-shadow: 0 0 10px rgba(247, 160, 51, 0.4);
+        }
+
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
             padding: 10px;
         }
 
         .card {
-            background: #1a1a1a;
-            border-radius: 10px;
-            border: 1px solid #333;
+            background: #113238; /* Малку посветла нијанса за картичките */
+            border-radius: 12px;
+            border: 2px solid #1a4d55;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        .card:active { transform: scale(0.95); border-color: #00ffff; }
+        .card:hover {
+            border-color: #00ffff;
+            transform: translateY(-5px);
+        }
 
         .thumb {
             width: 100%;
-            height: 100px;
-            background: #222;
+            height: 110px;
+            background: #051417;
             object-fit: cover;
-            border-bottom: 1px solid #333;
+            border-bottom: 2px solid #1a4d55;
         }
 
-        .name { padding: 8px; font-size: 13px; text-align: center; font-weight: bold; }
+        .name { 
+            padding: 10px; 
+            font-size: 14px; 
+            text-align: center; 
+            font-weight: bold; 
+            color: #00ffff; /* Тиркизна */
+        }
         
         .copy-btn {
-            background: #00ffff;
-            color: #000;
+            background: #f0e6d2; /* Крем боја како активните копчиња */
+            color: #f7a033; /* Портокалов текст */
             border: none;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: bold;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 900;
             cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: inset 0 0 8px rgba(247, 160, 51, 0.3);
+            transition: 0.2s;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.9);
+            background: #f7a033;
+            color: #fff;
         }
 
         #toast {
@@ -53,13 +83,14 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #00ffff;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 5px;
+            background: #f7a033;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
             display: none;
             font-weight: bold;
             z-index: 100;
+            box-shadow: 0 0 20px rgba(247, 160, 51, 0.5);
         }
     </style>
 </head>
@@ -67,7 +98,7 @@
 
     <h2>ELIFLAR INTROS</h2>
     
-<div class="gallery-grid">
+    <div class="gallery-grid">
         <div class="card">
             <img src="thumbnails/classic.jpg" class="thumb" alt="Classic">
             <div class="name">Classic Imagery</div>
@@ -76,39 +107,25 @@
 
         <div class="card">
             <img src="thumbnails/classic.jpg" class="thumb" alt="Neon">
-            <div class="name">Neon Storm</div>
+            <div class="name">Modern Neon</div>
             <button class="copy-btn" onclick="copyCode('intros/classic.html')">COPY CODE</button>
         </div>
-
+        
         <div class="card">
-            <img src="thumbnails/classic.jpg" class="thumb" alt="Minimal">
-            <div class="name">Minimal Line</div>
-            <button class="copy-btn" onclick="copyCode('intros/classic.html')">COPY CODE</button>
-        </div>
-
-        <div class="card">
-            <img src="thumbnails/classic.jpg" class="thumb" alt="Dark">
-            <div class="name">Dark Atmosphere</div>
-            <button class="copy-btn" onclick="copyCode('intros/classic.html')">COPY CODE</button>
-        </div>
-
-        <div class="card">
-            <img src="thumbnails/classic.jpg" class="thumb" alt="Future">
-            <div class="name">Future Meteo</div>
+            <img src="thumbnails/classic.jpg" class="thumb" alt="Meteo">
+            <div class="name">Meteo Storm</div>
             <button class="copy-btn" onclick="copyCode('intros/classic.html')">COPY CODE</button>
         </div>
     </div>
 
-    <div id="toast">CODE COPIED!</div>
+    <div id="toast">КОДОТ Е КОПИРАН!</div>
 
     <script>
         async function copyCode(fileUrl) {
             try {
-                // Влечење на кодот од GitHub
                 const response = await fetch(fileUrl);
                 const text = await response.text();
                 
-                // Копирање во меморија
                 const el = document.createElement('textarea');
                 el.value = text;
                 document.body.appendChild(el);
@@ -116,7 +133,6 @@
                 document.execCommand('copy');
                 document.body.removeChild(el);
                 
-                // Нотификација
                 const toast = document.getElementById('toast');
                 toast.style.display = 'block';
                 setTimeout(() => { toast.style.display = 'none'; }, 2000);
