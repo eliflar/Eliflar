@@ -22,7 +22,7 @@
         }
 
         .bg-container img {
-            object-fit: fill; /* STRETCH ефект */
+            object-fit: fill; 
             filter: brightness(0.4) blur(4px);
             z-index: -1;
         }
@@ -36,23 +36,33 @@
         }
 
         .rect {
-            border: 4px double #00ffff;
+            /* ПРОМЕНА: Портокалова неонска боја наместо сина */
+            border: 4px double #ff6600;
             padding: 40px 60px;
-            background: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.7);
+            /* ПРОМЕНА: Пулсирачка портокалова сенка */
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.6);
             backdrop-filter: blur(5px);
+            animation: glow 2s infinite alternate;
         }
 
-        .theme { font-size: 36px; font-weight: bold; margin: 15px 0; }
-        .user { font-size: 20px; font-style: italic; color: #e0e0e0; }
+        .theme { font-size: 36px; font-weight: bold; margin: 15px 0; color: white; }
+        .user { font-size: 20px; font-style: italic; color: #ffcc99; }
 
         .tri {
             width: 0; height: 0;
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
-            border-top: 28px solid #00ffff;
+            /* ПРОМЕНА: Портокалов триаголник */
+            border-top: 28px solid #ff6600;
             margin: 25px auto;
             animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        /* НОВ ЕФЕКТ: Пулсирање на сјајот за видлив Web ефект */
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(255, 102, 0, 0.4); }
+            to { box-shadow: 0 0 45px rgba(255, 102, 0, 0.9); }
         }
 
         @keyframes bounce {
@@ -74,7 +84,7 @@
 
     <div class="content">
         <div class="rect">
-            <div style="letter-spacing: 5px; font-size: 14px; color: #00ffff;">IMAGERY</div>
+            <div style="letter-spacing: 5px; font-size: 14px; color: #ff6600; font-weight: bold;">WEB INTRО ACTIVE</div>
             <div class="theme">[[MOJA_TEMA]]</div>
             <div class="user">[[USER_SHOW]]</div>
         </div>
