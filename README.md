@@ -16,7 +16,7 @@
 This repository acts as a live hub for meteorological data visualization. Our automated systems process and push global forecast maps every hour.
 
 > [!TIP]
-> **Live View:** Below is the latest atmospheric forecast for Europe, updated automatically by our Python-driven server.
+> **Example View:** One atmospheric forecast for Europe, in the future - updated automatically by our Python-driven server.
 
 ![Latest Forecast](https://raw.githubusercontent.com/eliflar/Eliflar/main/forecast/1eu.jpg)
 
