@@ -1,58 +1,65 @@
-## Hi there 👋
-
-<# 🛰️ Welcome to the ELIFLAR Ecosystem
+# 🛰️ ELIFLAR: Live Video Creator
 
 <div align="center">
   <img src="EliflarLogoF.jpg" width="120" style="border-radius: 15px; border: 2px solid #e0b44a;">
   <h1>ELIFLAR</h1>
-  <p><i>Animate • Record • Create</i></p>
+  <p><strong>Animate • Record • Create • Share Instantly</strong></p>
   
+  <p><i>The fastest way to turn your ideas into narrated videos—no editing required.</i></p>
+
   <img src="EliflarOne900_1700.jpg" width="350" alt="Eliflar App Interface" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 </div>
 
 ---
 
-### 🌍 Real-Time Weather & Data Services
-This repository acts as a live hub for meteorological data visualization. Our automated systems process and push global forecast maps every hour.
+### 🚀 Stop Editing. Start Presenting.
+**Eliflar** is a powerful live production studio in your pocket. Whether you are explaining weather patterns, archaeological findings, or product reviews, Eliflar lets you narrate and animate your story in real-time. 
+
+**Record your voice, draw live effects, and your video is ready to post the moment you stop recording.**
+
+---
+
+### 🌍 Live Data Showcase (Automation)
+This repository serves as a real-time data hub. Our Python-driven servers process and push global atmospheric maps every hour, showcasing Eliflar's capability for professional data visualization.
 
 > [!TIP]
-> **Example View:** One atmospheric forecast for Europe, in the future - updated automatically by our Python-driven server.
+> **Dynamic Insight:** Below is the latest European forecast map, updated automatically by our automated backend.
 
 ![Latest Forecast](https://raw.githubusercontent.com/eliflar/Eliflar/main/forecast/1eu.jpg)
 
 ---
 
-### 📱 The Eliflar Mobile App
-**Eliflar** is a professional presentation tool designed for meteorologists, researchers, and creators who need to transform data into cinematic video content in seconds.
-
-#### ✨ Key Features
-- **Cinematic Intros:** Professional pre-designed styles (Classic, Modern).
-- **Live Flare Effects:** Interactive dynamic flares during recording.
-- **Privacy First:** 100% Local processing. No access to your private gallery or files.
-- **Zero-Latency:** Real-time slide control for perfect narration timing.
-
-#### 💎 Premium Benefits
-- **Full Color Palette:** Unlock unlimited flare and UI customization.
-- **Watermark-Free:** Professional clean exports for broadcast.
-- **Exclusive Library:** Access to premium "NoText" intro versions.
+### ✨ Key Features for Everyone
+- **Zero-Editing Workflow:** Your recording is your final product. No post-production needed.
+- **Live Flare & Drawing:** Drag dynamic color flares and highlights while you speak to emphasize key details.
+- **Professional Intros:** Choose from a library of cinematic intros (Classic, Modern, News) to give your video a "broadcast" feel.
+- **Full Slide Control:** Manage transitions and timing in real-time for a perfect flow.
+- **100% Privacy:** All processing is done locally. We never access your private gallery, files, or cloud storage.
 
 ---
 
-### 🛠️ Technical Stack
-- **Backend:** Python 3.8.10 (Automated GRIB/NetCDF processing)
-- **Deployment:** GitHub Actions & Git-Sync Automation
-- **Mobile:** MIT App Inventor (Native Android Development)
-- **Data Sources:** EUMETSAT, GFS, NOAA.
+### 💎 Premium Benefits
+- **Full Color Palette:** Unlock unlimited flare and UI customization for your brand.
+- **Pro Exports:** Remove all watermarks for clean, professional-grade content.
+- **Exclusive Library:** Access to premium "NoText" intro versions for a minimalist look.
+
+---
+
+### 🛠️ Technical Ecosystem
+- **Backend:** Python 3.8.10 (Automated GRIB/NetCDF & Image processing)
+- **Deployment:** GitHub Sync & Cloud Data Automation
+- **Mobile:** MIT App Inventor (Native Android Engine)
+- **Regional Focus:** Balkan & European Data visualization.
 
 ---
 
 ### 📜 License & Terms
 **Developer:** Boris Sekirarski  
-**EULA:** By using Eliflar, you agree to the non-exclusive personal/commercial license. Reverse engineering or redistribution of the APK without permission is strictly prohibited.
+**EULA:** By downloading and using Eliflar, you are granted a non-exclusive license for personal or commercial video creation. Reverse engineering or unauthorized redistribution of the APK is strictly prohibited.
 
 ---
 
 <div align="center">
   <p>Developed with ❤️ in North Macedonia</p>
-  <p><strong>© 2026 eliflar.app</strong></p>
+  <p><strong>Official Hub: <a href="http://eliflar.app">eliflar.app</a></strong></p>
 </div>
