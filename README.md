@@ -23,7 +23,7 @@
 This repository serves as a real-time data hub. Our Python-driven servers process and push global atmospheric maps every hour, showcasing Eliflar's capability for professional data visualization.
 
 > [!TIP]
-> **Dynamic Insight:** Below is the latest European forecast map, updated automatically by our automated backend.
+> **Dynamic Insight:** Below is the one of our latest European forecast map, we can update automatically regularly here or on any other web location by our automated backend.
 
 ![Latest Forecast](https://raw.githubusercontent.com/eliflar/Eliflar/main/forecast/1eu.jpg)
 
