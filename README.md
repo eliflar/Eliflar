@@ -48,7 +48,6 @@ This repository serves as a real-time data hub. Our Python-driven servers proces
 ### 🛠️ Technical Ecosystem
 - **Backend:** Python 3.8.10 (Automated GRIB/NetCDF & Image processing)
 - **Deployment:** GitHub Sync & Cloud Data Automation
-- **Mobile:** MIT App Inventor (Native Android Engine)
 - **Regional Focus:** Balkan & European Data visualization.
 
 ---
