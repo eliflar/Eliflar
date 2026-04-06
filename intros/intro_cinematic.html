@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#08050000;width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Georgia',serif}
+canvas{position:absolute;top:0;left:0}
+
+/* cinematic bars */
+.bar-top,.bar-bot{
+  position:fixed;left:0;right:0;background:#000;z-index:20;
+  height:12vh;
+  transition:height 1.2s cubic-bezier(.77,0,.18,1);
+}
+.bar-top{top:0}.bar-bot{bottom:0}
+.bars-open .bar-top,.bars-open .bar-bot{height:0}
+
+.stage{position:relative;z-index:10;text-align:center;width:90%;max-width:640px}
+
+.label{
+  font-family:'Segoe UI',sans-serif;
+  font-size:10px;letter-spacing:.7em;text-transform:uppercase;
+  color:rgba(212,175,55,0.5);margin-bottom:20px;
+  opacity:0;animation:fadeUp .6s ease forwards 1.8s;
+}
+
+.frame{
+  position:relative;
+  border-top:1px solid rgba(212,175,55,0.5);
+  border-bottom:1px solid rgba(212,175,55,0.5);
+  padding:clamp(30px,5vw,55px) clamp(24px,7vw,70px);
+  background:transparent;
+  overflow:hidden;
+  opacity:0;animation:frameReveal .8s ease forwards 1.4s;
+}
+.frame::before{
+  content:'';position:absolute;top:0;left:-160%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,0.12),transparent);
+  transform:skewX(-20deg);
+  animation:shine 4s 2.5s infinite ease-out;
+}
+
+/* theme — zoom in from far */
+.theme{
+  font-size:clamp(22px,5.5vw,46px);font-weight:400;
+  text-transform:uppercase;letter-spacing:.25em;
+  color:#fff;
+  text-shadow:0 2px 20px rgba(212,175,55,0.4);
+  opacity:0;
+  animation:zoomReveal .9s cubic-bezier(.175,.885,.32,1.275) forwards 1.6s;
+}
+
+/* word-by-word golden colour shift */
+.theme .word{
+  display:inline-block;
+  animation:goldShift 4s ease infinite;
+}
+.theme .word:nth-child(2){animation-delay:.3s}
+.theme .word:nth-child(3){animation-delay:.6s}
+.theme .word:nth-child(4){animation-delay:.9s}
+
+.divider{
+  display:flex;align-items:center;gap:12px;margin:18px auto;
+  width:fit-content;
+  opacity:0;animation:fadeUp .5s ease forwards 2.2s;
+}
+.dline{height:1px;width:50px;background:rgba(212,175,55,0.5)}
+.ddiamond{
+  width:8px;height:8px;background:rgba(212,175,55,0.8);
+  transform:rotate(45deg);
+  animation:diamondPulse 2s ease infinite 2.5s;
+}
+
+.user{
+  font-family:'Segoe UI',sans-serif;
+  font-size:clamp(10px,1.8vw,13px);
+  letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(212,175,55,0);
+  animation:goldFade .7s ease forwards 2.4s;
+}
+
+@keyframes zoomReveal{
+  0%  {opacity:0;transform:scale(2.5) translateY(10px);filter:blur(6px)}
+  60% {opacity:1;filter:blur(0)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+@keyframes frameReveal{
+  from{opacity:0;transform:scaleX(.6)}
+  to  {opacity:1;transform:scaleX(1)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+@keyframes goldFade{
+  to{color:rgba(212,175,55,0.75)}
+}
+@keyframes goldShift{
+  0%,100%{color:#fff;text-shadow:0 2px 20px rgba(212,175,55,0.3)}
+  50%    {color:#d4af37;text-shadow:0 0 20px rgba(212,175,55,0.8),0 0 40px rgba(212,175,55,0.4)}
+}
+@keyframes diamondPulse{
+  0%,100%{transform:rotate(45deg) scale(1);opacity:.8}
+  50%    {transform:rotate(45deg) scale(1.4);opacity:1}
+}
+@keyframes shine{
+  0%{left:-160%}45%{left:160%}100%{left:160%}
+}
+</style>
+</head>
+<body>
+
+<div class="bar-top" id="bt"></div>
+<div class="bar-bot" id="bb"></div>
+
+<canvas id="cv"></canvas>
+
+<div class="stage">
+  <div class="label">IMAGERY</div>
+  <div class="frame">
+    <div class="theme" id="theme"></div>
+    <div class="divider">
+      <div class="dline"></div>
+      <div class="ddiamond"></div>
+      <div class="dline"></div>
+    </div>
+    <div class="user">[[USER_SHOW]]</div>
+  </div>
+</div>
+
+<script>
+/* ── render theme words with spans ── */
+const rawTheme = '[[MOJA_TEMA]]';
+const themeEl  = document.getElementById('theme');
+rawTheme.split(' ').forEach((w,i) => {
+  const span = document.createElement('span');
+  span.className = 'word';
+  span.textContent = w + (i < rawTheme.split(' ').length-1 ? '\u00A0' : '');
+  span.style.animationDelay = (i * 0.3) + 's';
+  themeEl.appendChild(span);
+});
+
+/* ── open cinematic bars ── */
+setTimeout(()=>document.body.classList.add('bars-open'), 400);
+
+/* ── canvas: gold dust ── */
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+function rs(){cv.width=window.innerWidth;cv.height=window.innerHeight}rs();
+window.addEventListener('resize',rs);
+
+/* gold dust particles */
+const dust=Array.from({length:80},()=>mkDust());
+function mkDust(){
+  return{
+    x:Math.random()*1,y:Math.random()*1,
+    vx:(Math.random()-.5)*.0004,vy:-(Math.random()*.0008+.0003),
+    r:Math.random()*1.8+.4,
+    op:Math.random()*.5+.1,
+    life:Math.random()
+  };
+}
+
+let t=0;
+function draw(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+
+  /* dark gold gradient bg */
+  const grd=ctx.createRadialGradient(cv.width/2,cv.height/2,0,cv.width/2,cv.height/2,cv.width*.7);
+  grd.addColorStop(0,'rgba(20,14,5,1)');
+  grd.addColorStop(1,'rgba(5,3,0,1)');
+  ctx.fillStyle=grd;ctx.fillRect(0,0,cv.width,cv.height);
+
+  /* vignette */
+  const vig=ctx.createRadialGradient(cv.width/2,cv.height/2,cv.height*.2,cv.width/2,cv.height/2,cv.height*.9);
+  vig.addColorStop(0,'rgba(0,0,0,0)');
+  vig.addColorStop(1,'rgba(0,0,0,0.7)');
+  ctx.fillStyle=vig;ctx.fillRect(0,0,cv.width,cv.height);
+
+  /* gold shimmer on top */
+  const shimY=cv.height*.5+Math.sin(t*.5)*cv.height*.05;
+  const shim=ctx.createLinearGradient(0,shimY-80,0,shimY+80);
+  shim.addColorStop(0,'rgba(212,175,55,0)');
+  shim.addColorStop(.5,'rgba(212,175,55,0.04)');
+  shim.addColorStop(1,'rgba(212,175,55,0)');
+  ctx.fillStyle=shim;ctx.fillRect(0,shimY-80,cv.width,160);
+
+  /* dust */
+  dust.forEach((d,i)=>{
+    d.x+=d.vx;d.y+=d.vy;d.life-=.002;
+    if(d.life<=0||d.y<0){dust[i]=mkDust();dust[i].y=1}
+    const op=d.op*Math.min(1,d.life*4);
+    ctx.beginPath();ctx.arc(d.x*cv.width,d.y*cv.height,d.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(212,175,55,${op})`;ctx.fill();
+  });
+
+  t+=.01;
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
