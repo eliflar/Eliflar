@@ -5,108 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eliflar Intros</title>
 <style>
-/* ═══════════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════════ */
-:root {
-    --bg:      #0a1f24;
-    --card-bg: #113238;
-    --orange:  #f7a033;
-    --cyan:    #00ffff;
-    --cream:   #f0e6d2;
-    --border:  #1a4d55;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--cream); min-height: 100vh; }
-
-/* ═══════════════════════════════════════════
-   TAB BAR
-═══════════════════════════════════════════ */
+:root { --bg:#0a1f24; --card-bg:#113238; --orange:#f7a033; --cyan:#00ffff; --cream:#f0e6d2; --border:#1a4d55; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--cream); min-height:100vh; }
 .tab-bar { display:flex; border-bottom:2px solid var(--border); background:rgba(17,50,56,.7); position:sticky; top:0; z-index:100; }
 .tab-btn { flex:1; padding:15px 10px; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; background:none; border:none; color:rgba(240,230,210,.35); border-bottom:3px solid transparent; margin-bottom:-2px; transition:.2s; }
-.tab-btn.active             { color:var(--orange); border-bottom-color:var(--orange); }
+.tab-btn.active { color:var(--orange); border-bottom-color:var(--orange); }
 .tab-btn:hover:not(.active) { color:var(--cream); }
 .panel { display:none; padding:24px 16px; }
 .panel.active { display:block; }
-
-/* ═══════════════════════════════════════════
-   PAGE HEADER
-═══════════════════════════════════════════ */
 .page-header { text-align:center; margin-bottom:22px; }
 .page-header h2 { color:var(--orange); letter-spacing:3px; text-transform:uppercase; font-size:20px; margin-bottom:7px; }
-.page-header p  { font-size:13px; color:var(--cyan); letter-spacing:1px; font-weight:700; }
-
-/* ═══════════════════════════════════════════
-   GALLERY — arrow symbol
-═══════════════════════════════════════════ */
+.page-header p { font-size:13px; color:var(--cyan); letter-spacing:1px; font-weight:700; }
 .symbol { display:inline-flex; align-items:center; gap:18px; padding:12px 26px; background:rgba(17,50,56,.5); border-radius:50px; margin-bottom:24px; border:1px solid var(--border); }
-.lines  { display:flex; flex-direction:column; gap:4px; }
-.line   { width:24px; height:4px; background:var(--cyan); border-radius:2px; }
-.arrow  { font-size:20px; color:var(--orange); animation:slide 1.5s infinite; }
-.vicon  { width:42px; height:28px; background:var(--cream); border-radius:5px; display:flex; justify-content:center; align-items:center; }
-.tri    { width:0; height:0; border-left:9px solid var(--orange); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.lines { display:flex; flex-direction:column; gap:4px; }
+.line { width:24px; height:4px; background:var(--cyan); border-radius:2px; }
+.arrow { font-size:20px; color:var(--orange); animation:slide 1.5s infinite; }
+.vicon { width:42px; height:28px; background:var(--cream); border-radius:5px; display:flex; justify-content:center; align-items:center; }
+.tri { width:0; height:0; border-left:9px solid var(--orange); border-top:5px solid transparent; border-bottom:5px solid transparent; }
 @keyframes slide { 0%{transform:translateX(-5px);opacity:.3} 50%{opacity:1} 100%{transform:translateX(5px);opacity:.3} }
-
-/* ═══════════════════════════════════════════
-   GALLERY — CARD GRID
-═══════════════════════════════════════════ */
-.gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:16px; max-width:980px; margin:0 auto; }
-
+.gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; max-width:980px; margin:0 auto; }
 .card { background:var(--card-bg); border-radius:12px; border:2px solid var(--border); overflow:hidden; display:flex; flex-direction:column; transition:.3s cubic-bezier(.175,.885,.32,1.275); cursor:pointer; -webkit-tap-highlight-color:transparent; }
-.card:hover  { border-color:var(--cyan); transform:translateY(-6px); box-shadow:0 12px 28px rgba(0,0,0,.55); }
+.card:hover { border-color:var(--cyan); transform:translateY(-6px); box-shadow:0 12px 28px rgba(0,0,0,.55); }
 .card.tapped { border-color:var(--orange); transform:scale(.97); }
-
-/* Thumb — 16:9 box that holds the scaled iframe */
-.thumb {
-    position:relative; width:100%; aspect-ratio:16/9;
-    overflow:hidden; border-bottom:2px solid var(--border);
-    background:#051417;
-}
-/* iframe rendered at real size, then scaled to fit the thumb */
-.thumb iframe {
-    position:absolute; top:0; left:0;
-    width:500%; height:500%;
-    border:none;
-    transform:scale(.2); transform-origin:top left;
-    pointer-events:none;
-    opacity:0; transition:opacity .5s;
-}
+.thumb { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-bottom:2px solid var(--border); background:#051417; }
+.thumb iframe { position:absolute; top:0; left:0; width:500%; height:500%; border:none; transform:scale(.2); transform-origin:top left; pointer-events:none; opacity:0; transition:opacity .5s; }
 .thumb iframe.loaded { opacity:1; }
-
-/* Loading text shown until iframe is ready */
-.thumb .loader {
-    position:absolute; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    font-size:10px; font-weight:700; letter-spacing:2px;
-    color:rgba(0,255,255,.3); text-transform:uppercase;
-    pointer-events:none; transition:opacity .4s;
-}
+.thumb .loader { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; letter-spacing:2px; color:rgba(0,255,255,.3); text-transform:uppercase; pointer-events:none; transition:opacity .4s; }
 .thumb iframe.loaded ~ .loader { opacity:0; }
-
-/* Tap-to-copy overlay — appears after tap */
-.copy-overlay {
-    position:absolute; inset:0;
-    background:rgba(247,160,51,.18);
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; transition:opacity .2s; pointer-events:none;
-}
+.copy-overlay { position:absolute; inset:0; background:rgba(247,160,51,.18); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; pointer-events:none; }
 .copy-overlay span { font-size:11px; font-weight:900; letter-spacing:2px; color:var(--orange); text-transform:uppercase; background:rgba(10,31,36,.85); padding:6px 12px; border-radius:20px; }
-
 .card-name { padding:9px 12px 2px; font-size:13px; font-weight:700; color:var(--cream); }
-.card-sub  { padding:0 12px 10px; font-size:11px; color:var(--cyan); opacity:.7; }
-
-/* Tap hint row */
+.card-sub { padding:0 12px 10px; font-size:11px; color:var(--cyan); opacity:.7; }
 .tap-hint { display:flex; align-items:center; justify-content:center; gap:6px; padding:9px 12px; border-top:1px solid var(--border); font-size:11px; color:rgba(240,230,210,.4); letter-spacing:.5px; margin-top:auto; }
 .tap-hint svg { width:12px; height:12px; flex-shrink:0; }
-
-/* ═══════════════════════════════════════════
-   COPY TOAST
-═══════════════════════════════════════════ */
 #toast { position:fixed; bottom:26px; left:50%; transform:translateX(-50%); background:var(--orange); color:white; padding:11px 24px; border-radius:30px; display:none; font-weight:900; letter-spacing:1px; box-shadow:0 5px 20px rgba(0,0,0,.45); z-index:9999; font-size:13px; white-space:nowrap; }
-
-/* ═══════════════════════════════════════════
-   GENERATOR — sections
-═══════════════════════════════════════════ */
 .gen-section { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:14px; max-width:860px; margin-left:auto; margin-right:auto; }
 .sec-label { font-size:10px; font-weight:700; color:var(--cyan); letter-spacing:.1em; text-transform:uppercase; margin-bottom:14px; opacity:.8; }
 .fields-row { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:12px; }
@@ -116,24 +49,21 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--
 .field input:focus { border-color:var(--cyan); }
 .toggle-row { display:flex; align-items:center; gap:8px; }
 .toggle-row label { font-size:12px; color:rgba(240,230,210,.55); cursor:pointer; }
-
-.style-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(100px,1fr)); gap:10px; }
-.scard { border:2px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; position:relative; aspect-ratio:16/9; transition:transform .15s, border-color .15s; }
+.style-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:10px; }
+.scard { border:2px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; position:relative; aspect-ratio:16/9; transition:transform .15s,border-color .15s; }
 .scard:hover { transform:scale(1.04); border-color:rgba(0,255,255,.4); }
-.scard.sel   { border-color:var(--cyan); }
+.scard.sel { border-color:var(--cyan); }
 .scard canvas { width:100%; height:100%; display:block; }
 .scard-label { position:absolute; bottom:0; left:0; right:0; padding:3px 5px; background:rgba(0,0,0,.65); font-size:10px; font-weight:700; color:var(--cream); text-align:center; }
 .scard.sel .scard-label { background:rgba(0,100,120,.8); color:var(--cyan); }
 .sel-dot { position:absolute; top:4px; right:4px; width:8px; height:8px; border-radius:50%; background:var(--cyan); display:none; }
 .scard.sel .sel-dot { display:block; }
-
 .btn-row { display:flex; gap:10px; max-width:860px; margin:0 auto 16px; }
 .eliflar-btn { flex:1; padding:13px 16px; background:linear-gradient(135deg,var(--orange),#c47820); color:white; border:none; border-radius:8px; font-size:13px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:.2s; }
-.eliflar-btn:hover  { opacity:.88; transform:translateY(-1px); }
+.eliflar-btn:hover { opacity:.88; transform:translateY(-1px); }
 .eliflar-btn:active { transform:scale(.98); }
 .rand-btn { padding:13px 18px; background:rgba(17,50,56,.9); color:var(--cyan); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; white-space:nowrap; transition:.2s; }
 .rand-btn:hover { border-color:var(--cyan); background:rgba(0,255,255,.07); }
-
 .out-wrap { max-width:860px; margin:0 auto; background:var(--card-bg); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
 .out-head { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:8px; }
 .out-tabs { display:flex; gap:4px; }
@@ -149,434 +79,399 @@ body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--
 <body>
 
 <div class="tab-bar">
-    <button class="tab-btn active" id="tb-gallery"   onclick="switchTab('gallery')">Gallery</button>
-    <button class="tab-btn"        id="tb-generator" onclick="switchTab('generator')">Generator</button>
+  <button class="tab-btn active" id="tb-gallery"   onclick="switchTab('gallery')">Gallery</button>
+  <button class="tab-btn"        id="tb-generator" onclick="switchTab('generator')">Generator</button>
 </div>
-
 
 <!-- ═══════════════════════════════════════════════════════════
      TAB 1 — GALLERY
-     ───────────────────────────────────────────────────────────
-     HOW TO ADD A NEW INTRO (3–4 lines):
+     HOW TO ADD A NEW INTRO (3-4 lines):
 
-        <div class="card" data-file="intros/NAME.html">
-            <div class="card-name">Display Name</div>
-            <div class="card-sub">Short description</div>
-        </div>
+       <div class="card" data-file="intros/NAME.html">
+           <div class="card-name">Display Name</div>
+           <div class="card-sub">Short description</div>
+       </div>
 
      Place it below the "ADD MORE INTROS" comment.
-     No images, no thumbnails folder needed.
+     No images needed — thumbnails render live from the HTML.
 ════════════════════════════════════════════════════════════ -->
 <div class="panel active" id="panel-gallery">
-    <div class="page-header">
-        <h2>Eliflar Intros</h2>
-        <p>Tap a card to copy — paste into Eliflar app</p>
+  <div class="page-header">
+    <h2>Eliflar Intros</h2>
+    <p>Tap a card to copy — paste into Eliflar app</p>
+  </div>
+  <div style="text-align:center">
+    <div class="symbol">
+      <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="vicon"><div class="tri"></div></div>
+    </div>
+  </div>
+  <div class="gallery-grid" id="gallery-grid">
+
+    <!-- ── INTRO 1 ── -->
+    <div class="card" data-file="intros/classic.html">
+      <div class="card-name">Classic Imagery</div>
+      <div class="card-sub">Original dark style</div>
     </div>
 
-    <div style="text-align:center">
-        <div class="symbol">
-            <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
-            <div class="arrow">➞</div>
-            <div class="vicon"><div class="tri"></div></div>
-        </div>
+    <!-- ── INTRO 2 ── -->
+    <div class="card" data-file="intros/modern.html">
+      <div class="card-name">Modern Flare</div>
+      <div class="card-sub">Clean & minimal</div>
     </div>
 
-    <div class="gallery-grid" id="gallery-grid">
-
-        <!-- ── INTRO 1 ── -->
-        <div class="card" data-file="intros/classic.html">
-            <div class="card-name">Classic Imagery</div>
-            <div class="card-sub">Original dark style</div>
-        </div>
-
-        <!-- ── INTRO 2 ── -->
-        <div class="card" data-file="intros/modern.html">
-            <div class="card-name">Modern Flare</div>
-            <div class="card-sub">Clean & minimal</div>
-        </div>
-
-        <!-- ── INTRO 3 ── -->
-        <div class="card" data-file="intros/storm.html">
-            <div class="card-name">Storm Tracker</div>
-            <div class="card-sub">Electric atmosphere</div>
-        </div>
-
-        <!-- ── INTRO 4 ── -->
-        <div class="card" data-file="intros/intro_cinematic.html">
-            <div class="card-name">Cinematic</div>
-            <div class="card-sub">Cinematic move</div>
-        </div>
-        <!-- ── INTRO 5 ── -->
-        <div class="card" data-file="intros/intro_glitch.html">
-            <div class="card-name">Glitch</div>
-            <div class="card-sub">Glitch up</div>
-        </div>
-        <!-- ── INTRO 6 ── -->
-        <div class="card" data-file="intros/intro_letters.html">
-            <div class="card-name">Letters</div>
-            <div class="card-sub">Letters path</div>
-        </div>
-        <!-- ── INTRO 7 ── -->
-        <div class="card" data-file="intros/intro_shockwave.html">
-            <div class="card-name">Shockwave</div>
-            <div class="card-sub">Shockwave</div>
-        </div>
-        <!-- ── INTRO 8 ── -->
-        <div class="card" data-file="intros/intro_typewriter.html">
-            <div class="card-name">Typewriter</div>
-            <div class="card-sub">Typewriter</div>
-        </div>
-
-        <!-- ── ADD MORE INTROS BELOW ── -->
-
+    <!-- ── INTRO 3 ── -->
+    <div class="card" data-file="intros/storm.html">
+      <div class="card-name">Storm Tracker</div>
+      <div class="card-sub">Electric atmosphere</div>
     </div>
+
+    <!-- ── INTRO 4 ── -->
+    <div class="card" data-file="intros/intro_cinematic.html">
+      <div class="card-name">Cinematic</div>
+      <div class="card-sub">Cinematic move</div>
+    </div>
+
+    <!-- ── INTRO 5 ── -->
+    <div class="card" data-file="intros/intro_glitch.html">
+      <div class="card-name">Glitch</div>
+      <div class="card-sub">Glitch up</div>
+    </div>
+
+    <!-- ── INTRO 6 ── -->
+    <div class="card" data-file="intros/intro_letters.html">
+      <div class="card-name">Letters</div>
+      <div class="card-sub">Letters path</div>
+    </div>
+
+    <!-- ── INTRO 7 ── -->
+    <div class="card" data-file="intros/intro_shockwave.html">
+      <div class="card-name">Shockwave</div>
+      <div class="card-sub">Shockwave</div>
+    </div>
+
+    <!-- ── INTRO 8 ── -->
+    <div class="card" data-file="intros/intro_typewriter.html">
+      <div class="card-name">Typewriter</div>
+      <div class="card-sub">Typewriter</div>
+    </div>
+
+    <!-- ── ADD MORE INTROS BELOW ── -->
+
+  </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════
+<!-- ═══════════════════════════════════════
      TAB 2 — GENERATOR
-═══════════════════════════════════════════ -->
+═══════════════════════════════════════ -->
 <div class="panel" id="panel-generator">
-    <div class="page-header">
-        <h2>Intro Generator</h2>
-        <p>Build a custom intro — copy the HTML into Eliflar</p>
+  <div class="page-header">
+    <h2>Intro Generator</h2>
+    <p>Build a custom intro — copy the HTML into Eliflar</p>
+  </div>
+  <div class="gen-section">
+    <div class="sec-label">Content</div>
+    <div class="fields-row">
+      <div class="field">
+        <label>Theme <span style="opacity:.4;font-size:10px;">&#8594; [[MOJA_TEMA]]</span></label>
+        <input type="text" id="tema" value="Artificial Intelligence" />
+      </div>
+      <div class="field">
+        <label>Author / Episode <span style="opacity:.4;font-size:10px;">&#8594; [[USER_SHOW]]</span></label>
+        <input type="text" id="user" value="Marco &middot; Episode 01" />
+      </div>
     </div>
-
-    <div class="gen-section">
-        <div class="sec-label">Content</div>
-        <div class="fields-row">
-            <div class="field">
-                <label>Theme <span style="opacity:.4;font-size:10px;">→ [[MOJA_TEMA]]</span></label>
-                <input type="text" id="tema" value="Artificial Intelligence" />
-            </div>
-            <div class="field">
-                <label>Author / Episode <span style="opacity:.4;font-size:10px;">→ [[USER_SHOW]]</span></label>
-                <input type="text" id="user" value="Marco · Episode 01" />
-            </div>
-        </div>
-        <div class="toggle-row">
-            <input type="checkbox" id="show-imagery" checked />
-            <label for="show-imagery">Show IMAGERY label</label>
-        </div>
+    <div class="toggle-row">
+      <input type="checkbox" id="show-imagery" checked />
+      <label for="show-imagery">Show IMAGERY label</label>
     </div>
-
-    <div class="gen-section">
-        <div class="sec-label">Visual Style</div>
-        <div class="style-grid" id="style-grid"></div>
+  </div>
+  <div class="gen-section">
+    <div class="sec-label">Visual Style</div>
+    <div class="style-grid" id="style-grid"></div>
+  </div>
+  <div class="btn-row">
+    <button class="eliflar-btn" onclick="generate()">Generate Intro</button>
+    <button class="rand-btn"    onclick="pickRandom()">&#9654; Random</button>
+  </div>
+  <div class="out-wrap" id="out-wrap" style="display:none;">
+    <div class="out-head">
+      <div class="out-tabs">
+        <button class="otab active" id="tab-p" onclick="switchOutTab('preview')">Preview</button>
+        <button class="otab"        id="tab-c" onclick="switchOutTab('code')">HTML Code</button>
+      </div>
+      <button class="act-btn" id="copy-gen-btn" onclick="copyGenCode()">Copy HTML</button>
     </div>
-
-    <div class="btn-row">
-        <button class="eliflar-btn" onclick="generate()">Generate Intro</button>
-        <button class="rand-btn"    onclick="pickRandom()">&#9654; Random</button>
-    </div>
-
-    <div class="out-wrap" id="out-wrap" style="display:none;">
-        <div class="out-head">
-            <div class="out-tabs">
-                <button class="otab active" id="tab-p" onclick="switchOutTab('preview')">Preview</button>
-                <button class="otab"        id="tab-c" onclick="switchOutTab('code')">HTML Code</button>
-            </div>
-            <button class="act-btn" id="copy-gen-btn" onclick="copyGenCode()">Copy HTML</button>
-        </div>
-        <iframe id="pframe" title="preview"></iframe>
-        <div id="cpanel"><pre id="cout"></pre></div>
-    </div>
+    <iframe id="pframe" title="preview"></iframe>
+    <div id="cpanel"><pre id="cout"></pre></div>
+  </div>
 </div>
-
 
 <div id="toast"></div>
 
-
 <script>
-/* ═══════════════════════════════════════════
-   UI HELPERS
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   UI
+═══════════════════════════════════════ */
 function switchTab(t) {
-    ['gallery','generator'].forEach(id => {
-        document.getElementById('panel-'+id).classList.toggle('active', id===t);
-        document.getElementById('tb-'+id).classList.toggle('active', id===t);
-    });
+  ['gallery','generator'].forEach(function(id) {
+    document.getElementById('panel-'+id).classList.toggle('active', id===t);
+    document.getElementById('tb-'+id).classList.toggle('active', id===t);
+  });
 }
 function switchOutTab(t) {
-    document.getElementById('tab-p').classList.toggle('active', t==='preview');
-    document.getElementById('tab-c').classList.toggle('active', t==='code');
-    document.getElementById('pframe').style.display  = t==='preview' ? 'block' : 'none';
-    document.getElementById('cpanel').style.display  = t==='code'    ? 'block' : 'none';
+  document.getElementById('tab-p').classList.toggle('active', t==='preview');
+  document.getElementById('tab-c').classList.toggle('active', t==='code');
+  document.getElementById('pframe').style.display  = t==='preview' ? 'block' : 'none';
+  document.getElementById('cpanel').style.display  = t==='code'    ? 'block' : 'none';
 }
 function showToast(msg, ok) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.style.background = ok===false ? '#c0392b' : 'var(--orange)';
-    el.style.display = 'block';
-    setTimeout(() => el.style.display = 'none', 2400);
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = ok===false ? '#c0392b' : 'var(--orange)';
+  el.style.display = 'block';
+  setTimeout(function(){ el.style.display='none'; }, 2400);
 }
 
-/* ═══════════════════════════════════════════
-   GALLERY — build cards + lazy iframe load
-═══════════════════════════════════════════ */
-function buildGallery() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            const card = entry.target;
-            const iframe = card.querySelector('iframe');
-            if (iframe && !iframe.src) {
-                iframe.src = card.dataset.file;
-            }
-            observer.unobserve(card);
-        });
-    }, { rootMargin: '200px' });
-
-    document.querySelectorAll('#gallery-grid .card').forEach(card => {
-        const file = card.dataset.file;
-        if (!file) return;
-
-        /* ── live thumbnail (lazy) ── */
-        const thumb = document.createElement('div');
-        thumb.className = 'thumb';
-
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('scrolling', 'no');
-        iframe.onload = () => iframe.classList.add('loaded');
-        /* src set by IntersectionObserver, not here */
-        thumb.appendChild(iframe);
-
-        const loader = document.createElement('div');
-        loader.className = 'loader';
-        loader.textContent = 'Loading…';
-        thumb.appendChild(loader);
-
-        const overlay = document.createElement('div');
-        overlay.className = 'copy-overlay';
-        overlay.innerHTML = '<span>TAP TO COPY</span>';
-        thumb.appendChild(overlay);
-
-        card.insertBefore(thumb, card.firstChild);
-
-        /* ── tap hint footer ── */
-        const hint = document.createElement('div');
-        hint.className = 'tap-hint';
-        hint.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1v5M4 4l2 2 2-2"/><rect x="1" y="7" width="10" height="4" rx="1.5"/></svg> Tap to copy`;
-        card.appendChild(hint);
-
-        /* ── TAP handler — copy HTML from iframe content ── */
-        card.addEventListener('click', () => {
-            card.classList.add('tapped');
-            setTimeout(() => card.classList.remove('tapped'), 300);
-
-            /* Try to get HTML from iframe document (same-origin / file) */
-            try {
-                const doc = iframe.contentDocument || iframe.contentWindow.document;
-                const html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
-                copyText(html, card);
-                return;
-            } catch(e) { /* cross-origin or not loaded yet — fall through */ }
-
-            /* Fallback: fetch the file */
-            fetch(file)
-                .then(r => r.text())
-                .then(html => copyText(html, card))
-                .catch(() => {
-                    /* Last resort: read from iframe srcdoc if set */
-                    showToast('Could not read the file', false);
-                });
-        });
-
-        observer.observe(card);
-    });
+/* ═══════════════════════════════════════
+   UNIVERSAL COPY — clipboard API + execCommand fallback
+═══════════════════════════════════════ */
+function copyToClipboard(text, onOk, onFail) {
+  if (!text) { if (onFail) onFail(); return; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function(){
+      if (onOk) onOk();
+    }).catch(function(){ legacyExec(text, onOk, onFail); });
+  } else {
+    legacyExec(text, onOk, onFail);
+  }
 }
-
-function copyText(html, card) {
-    const overlay = card.querySelector('.copy-overlay');
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(html)
-            .then(() => {
-                overlay.style.opacity = '1';
-                setTimeout(() => overlay.style.opacity = '0', 600);
-                showToast('CODE COPIED — paste into Eliflar!');
-            })
-            .catch(() => legacyCopy(html, card));
-    } else {
-        legacyCopy(html, card);
-    }
-}
-
-function legacyCopy(html, card) {
-    /* Works in AppInventor WebView which may not support clipboard API */
-    const ta = document.createElement('textarea');
-    ta.value = html;
-    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+function legacyExec(text, onOk, onFail) {
+  try {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;width:1px;height:1px';
     document.body.appendChild(ta);
     ta.focus(); ta.select();
-    const ok = document.execCommand('copy');
+    var ok = document.execCommand('copy');
     document.body.removeChild(ta);
-    const overlay = card ? card.querySelector('.copy-overlay') : null;
-    if (ok) {
-        if (overlay) { overlay.style.opacity='1'; setTimeout(()=>overlay.style.opacity='0',600); }
-        showToast('CODE COPIED — paste into Eliflar!');
-    } else {
-        showToast('Copy failed — try long-pressing', false);
-    }
+    if (ok) { if (onOk)   onOk(); }
+    else    { if (onFail) onFail(); }
+  } catch(e) { if (onFail) onFail(); }
 }
 
-/* ═══════════════════════════════════════════
-   GENERATOR — STYLES REGISTRY
-   ─────────────────────────────────────────
-   To add a new style, append one entry to
-   each of the four sections marked below.
-═══════════════════════════════════════════ */
-const STYLES = [
-    { id:'cosmos',   name:'Cosmos',   sub:'Deep space'    },
-    { id:'rain',     name:'Rain',     sub:'Downpour'      },
-    { id:'matrix',   name:'Matrix',   sub:'Digital rain'  },
-    { id:'forge',    name:'Forge',    sub:'Fire & embers' },
-    { id:'abyss',    name:'Abyss',    sub:'Ocean depth'   },
-    { id:'noir',     name:'Noir',     sub:'Film grain'    },
-    { id:'blizzard', name:'Blizzard', sub:'Snowstorm'     },
-    { id:'grid',     name:'Grid',     sub:'Tron / tech'   },
-    /* ── new style: { id:'NAME', name:'Label', sub:'Desc' } ── */
+/* ═══════════════════════════════════════
+   GALLERY — lazy iframe thumbnails + tap to copy
+═══════════════════════════════════════ */
+function buildGallery() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var card   = entry.target;
+      var iframe = card.querySelector('iframe');
+      if (iframe && !iframe.src) iframe.src = card.dataset.file;
+      observer.unobserve(card);
+    });
+  }, { rootMargin: '200px' });
+
+  document.querySelectorAll('#gallery-grid .card').forEach(function(card) {
+    var file = card.dataset.file;
+    if (!file) return;
+
+    var thumb = document.createElement('div');
+    thumb.className = 'thumb';
+
+    var iframe = document.createElement('iframe');
+    iframe.setAttribute('scrolling','no');
+    iframe.onload = function(){ iframe.classList.add('loaded'); };
+    thumb.appendChild(iframe);
+
+    var loader = document.createElement('div');
+    loader.className = 'loader';
+    loader.textContent = 'Loading\u2026';
+    thumb.appendChild(loader);
+
+    var overlay = document.createElement('div');
+    overlay.className = 'copy-overlay';
+    overlay.innerHTML = '<span>TAP TO COPY</span>';
+    thumb.appendChild(overlay);
+
+    card.insertBefore(thumb, card.firstChild);
+
+    var hint = document.createElement('div');
+    hint.className = 'tap-hint';
+    hint.innerHTML = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1v5M4 4l2 2 2-2"/><rect x="1" y="7" width="10" height="4" rx="1.5"/></svg> Tap to copy';
+    card.appendChild(hint);
+
+    card.addEventListener('click', function() {
+      card.classList.add('tapped');
+      setTimeout(function(){ card.classList.remove('tapped'); }, 300);
+
+      /* try iframe content first (same-origin / file://) */
+      var html = '';
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (doc && doc.documentElement) {
+          html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+        }
+      } catch(e) {}
+
+      if (html) {
+        doCopy(html, overlay);
+      } else {
+        fetch(file)
+          .then(function(r){ return r.text(); })
+          .then(function(t){ doCopy(t, overlay); })
+          .catch(function(){ showToast('Could not read the file', false); });
+      }
+    });
+
+    observer.observe(card);
+  });
+}
+
+function doCopy(html, overlay) {
+  copyToClipboard(html, function() {
+    if (overlay) {
+      overlay.style.opacity = '1';
+      setTimeout(function(){ overlay.style.opacity='0'; }, 700);
+    }
+    showToast('CODE COPIED \u2014 paste into Eliflar!');
+  }, function() {
+    showToast('Copy failed \u2014 try long-pressing', false);
+  });
+}
+
+/* ═══════════════════════════════════════
+   GENERATOR — styles registry
+   To add a new style: one entry in each
+   of the four sections marked below.
+═══════════════════════════════════════ */
+var STYLES = [
+  { id:'cosmos',   name:'Cosmos',   sub:'Deep space'    },
+  { id:'rain',     name:'Rain',     sub:'Downpour'      },
+  { id:'matrix',   name:'Matrix',   sub:'Digital rain'  },
+  { id:'forge',    name:'Forge',    sub:'Fire & embers' },
+  { id:'abyss',    name:'Abyss',    sub:'Ocean depth'   },
+  { id:'noir',     name:'Noir',     sub:'Film grain'    },
+  { id:'blizzard', name:'Blizzard', sub:'Snowstorm'     },
+  { id:'grid',     name:'Grid',     sub:'Tron / tech'   },
+  /* new style: { id:'NAME', name:'Label', sub:'Desc' } */
 ];
 
-const STYLE_CONFIGS = {
-    cosmos:   {bg:'#010510',acc:'rgba(80,130,255,.8)',  lc:'rgba(100,150,255,.45)',tc:'#fff',  uc:'rgba(140,180,255,.75)',bc:'rgba(80,130,255,.35)', overlay:'rgba(5,12,30,.88)',  shine:'rgba(100,150,255,.12)'},
-    rain:     {bg:'#030d15',acc:'rgba(0,180,240,.7)',   lc:'rgba(0,190,240,.4)',  tc:'#fff',  uc:'rgba(0,210,255,.7)',   bc:'rgba(0,160,220,.3)',   overlay:'rgba(2,10,20,.9)',   shine:'rgba(0,200,255,.1)'  },
-    matrix:   {bg:'#000800',acc:'rgba(0,220,60,.6)',    lc:'rgba(0,200,50,.45)',  tc:'#0f5', uc:'rgba(0,200,80,.75)',  bc:'rgba(0,200,60,.25)',   overlay:'rgba(0,6,0,.92)',    shine:'rgba(0,255,70,.08)'  },
-    forge:    {bg:'#060100',acc:'rgba(255,80,0,.7)',    lc:'rgba(255,100,0,.45)', tc:'#fff',  uc:'rgba(255,160,50,.8)', bc:'rgba(255,80,0,.3)',    overlay:'rgba(12,4,0,.9)',    shine:'rgba(255,120,0,.1)'  },
-    abyss:    {bg:'#010b10',acc:'rgba(0,190,175,.65)',  lc:'rgba(0,200,180,.4)',  tc:'#fff',  uc:'rgba(0,220,200,.72)', bc:'rgba(0,180,165,.28)',  overlay:'rgba(0,8,12,.9)',    shine:'rgba(0,200,180,.09)' },
-    noir:     {bg:'#080808',acc:'rgba(255,255,255,.45)',lc:'rgba(255,255,255,.3)',tc:'#fff',  uc:'rgba(255,255,255,.55)',bc:'rgba(255,255,255,.18)',overlay:'rgba(8,8,8,.93)',    shine:'rgba(255,255,255,.04)'},
-    blizzard: {bg:'#040810',acc:'rgba(180,210,255,.55)',lc:'rgba(180,210,255,.35)',tc:'#fff', uc:'rgba(180,215,255,.68)',bc:'rgba(170,200,255,.22)',overlay:'rgba(3,6,14,.9)',    shine:'rgba(180,210,255,.07)'},
-    grid:     {bg:'#010108',acc:'rgba(80,110,255,.65)', lc:'rgba(80,120,255,.4)', tc:'#fff',  uc:'rgba(100,140,255,.72)',bc:'rgba(70,100,255,.28)', overlay:'rgba(1,1,10,.92)',   shine:'rgba(80,120,255,.08)' },
-    /* ── new style config here ── */
+var STYLE_CONFIGS = {
+  cosmos:   {bg:'#010510',acc:'rgba(80,130,255,.8)',  lc:'rgba(100,150,255,.45)',tc:'#fff',uc:'rgba(140,180,255,.75)',bc:'rgba(80,130,255,.35)', overlay:'rgba(5,12,30,.88)',  shine:'rgba(100,150,255,.12)'},
+  rain:     {bg:'#030d15',acc:'rgba(0,180,240,.7)',   lc:'rgba(0,190,240,.4)',  tc:'#fff',uc:'rgba(0,210,255,.7)',   bc:'rgba(0,160,220,.3)',   overlay:'rgba(2,10,20,.9)',   shine:'rgba(0,200,255,.1)'  },
+  matrix:   {bg:'#000800',acc:'rgba(0,220,60,.6)',    lc:'rgba(0,200,50,.45)',  tc:'#0f5',uc:'rgba(0,200,80,.75)', bc:'rgba(0,200,60,.25)',   overlay:'rgba(0,6,0,.92)',    shine:'rgba(0,255,70,.08)'  },
+  forge:    {bg:'#060100',acc:'rgba(255,80,0,.7)',    lc:'rgba(255,100,0,.45)', tc:'#fff',uc:'rgba(255,160,50,.8)',bc:'rgba(255,80,0,.3)',    overlay:'rgba(12,4,0,.9)',    shine:'rgba(255,120,0,.1)'  },
+  abyss:    {bg:'#010b10',acc:'rgba(0,190,175,.65)',  lc:'rgba(0,200,180,.4)',  tc:'#fff',uc:'rgba(0,220,200,.72)',bc:'rgba(0,180,165,.28)',  overlay:'rgba(0,8,12,.9)',    shine:'rgba(0,200,180,.09)' },
+  noir:     {bg:'#080808',acc:'rgba(255,255,255,.45)',lc:'rgba(255,255,255,.3)',tc:'#fff',uc:'rgba(255,255,255,.55)',bc:'rgba(255,255,255,.18)',overlay:'rgba(8,8,8,.93)',   shine:'rgba(255,255,255,.04)'},
+  blizzard: {bg:'#040810',acc:'rgba(180,210,255,.55)',lc:'rgba(180,210,255,.35)',tc:'#fff',uc:'rgba(180,215,255,.68)',bc:'rgba(170,200,255,.22)',overlay:'rgba(3,6,14,.9)', shine:'rgba(180,210,255,.07)'},
+  grid:     {bg:'#010108',acc:'rgba(80,110,255,.65)', lc:'rgba(80,120,255,.4)', tc:'#fff',uc:'rgba(100,140,255,.72)',bc:'rgba(70,100,255,.28)',overlay:'rgba(1,1,10,.92)',  shine:'rgba(80,120,255,.08)' },
+  /* new style config here */
 };
 
-const STYLE_ANIMS = {
-    cosmos:  `const S=Array.from({length:220},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.2,p:Math.random()*Math.PI*2,sp:Math.random()*.008+.003}));function drawF(){x.clearRect(0,0,c.width,c.height);S.forEach(s=>{s.p+=s.sp;x.beginPath();x.arc(s.x*c.width,s.y*c.height,s.r,0,Math.PI*2);x.fillStyle='rgba(180,210,255,'+(0.25+0.65*Math.abs(Math.sin(s.p)))+')';x.fill()});requestAnimationFrame(drawF)}drawF();`,
-    rain:    `const D=Array.from({length:160},()=>({x:Math.random(),y:Math.random(),l:Math.random()*18+8,s:Math.random()*7+3,o:Math.random()*.4+.08}));function drawF(){x.clearRect(0,0,c.width,c.height);D.forEach(d=>{x.strokeStyle='rgba(0,180,240,'+d.o+')';x.lineWidth=.6;x.beginPath();x.moveTo(d.x*c.width,d.y*c.height);x.lineTo(d.x*c.width-1.5,d.y*c.height+d.l);x.stroke();d.y+=d.s/c.height;if(d.y>1){d.y=0;d.x=Math.random()}});requestAnimationFrame(drawF)}drawF();`,
-    matrix:  `const drops=[];function rs2(){drops.length=0;for(let i=0;i<Math.floor(c.width/16);i++)drops.push(Math.random()*c.height/16)}rs2();window.addEventListener('resize',rs2);const CH='01アイウエオカキ';function drawF(){x.fillStyle='rgba(0,0,0,.06)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#00cc44';x.font='13px monospace';drops.forEach((y,i)=>{x.fillText(CH[Math.floor(Math.random()*CH.length)],i*16,y*16);if(y*16>c.height&&Math.random()>.975)drops[i]=0;drops[i]++});requestAnimationFrame(drawF)}drawF();`,
-    forge:   `c.style.position='absolute';c.style.bottom='0';c.style.top='auto';c.height=200;const buf=()=>new Float32Array(c.width*c.height);let b=buf(),b2=buf();function drawF(){for(let i=c.width*(c.height-1);i<c.width*c.height;i++)b[i]=Math.random()>.4?255:0;for(let y=1;y<c.height-1;y++)for(let px=0;px<c.width;px++){const v=(b[(y+1)*c.width+px]+b[(y+1)*c.width+(px-1+c.width)%c.width]+b[(y+1)*c.width+(px+1)%c.width]+b[y*c.width+px])/4.05;b2[(y-1)*c.width+px]=Math.max(0,v-.9)}const t=b;b=b2;const id=x.createImageData(c.width,c.height);for(let i=0;i<c.width*c.height;i++){const v=Math.min(255,t[i]);id.data[i*4]=Math.min(255,v*1.9);id.data[i*4+1]=Math.max(0,v*.55-20);id.data[i*4+2]=0;id.data[i*4+3]=Math.min(210,v*1.1)}x.putImageData(id,0,0);requestAnimationFrame(drawF)}drawF();`,
-    abyss:   `let t=0;function drawF(){x.clearRect(0,0,c.width,c.height);t+=.008;for(let i=0;i<7;i++){x.beginPath();const base=c.height*(.5+i*.07);x.moveTo(0,base);for(let px=0;px<=c.width;px+=5){const y=base+Math.sin(px*.007+t*(0.5+i*.08))*22+Math.sin(px*.014-t*.3)*(10+i*3);x.lineTo(px,y)}x.lineTo(c.width,c.height);x.lineTo(0,c.height);x.closePath();x.fillStyle='rgba(0,'+(90+i*12)+','+(110+i*8)+','+(0.13-i*.01)+')';x.fill()}requestAnimationFrame(drawF)}drawF();`,
-    noir:    `function noise(){const id=x.createImageData(c.width,c.height);const d=id.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=30}x.putImageData(id,0,0);setTimeout(noise,60)}noise();`,
-    blizzard:`const F=Array.from({length:130},()=>({x:Math.random(),y:Math.random(),r:Math.random()*2.2+.4,s:Math.random()*1.2+.25,w:Math.random()*1.2-.6,o:Math.random()*.4+.15,p:Math.random()*6}));let t=0;function drawF(){x.clearRect(0,0,c.width,c.height);t+=.01;F.forEach(f=>{f.p+=.01;x.beginPath();x.arc(f.x*c.width,f.y*c.height,f.r,0,Math.PI*2);x.fillStyle='rgba(200,220,255,'+f.o+')';x.fill();f.y+=f.s/c.height;f.x+=Math.sin(t+f.p)*(f.w/c.width);if(f.y>1){f.y=0;f.x=Math.random()}if(f.x<0)f.x=1;if(f.x>1)f.x=0});requestAnimationFrame(drawF)}drawF();`,
-    grid:    `const pulses=[];setInterval(()=>{if(pulses.length<8)pulses.push({x:Math.random(),y:Math.random(),r:0,op:.6})},800);const SZ=60;function drawF(){x.clearRect(0,0,c.width,c.height);const cols=Math.ceil(c.width/SZ)+1,rows=Math.ceil(c.height/SZ)+1;x.strokeStyle='rgba(60,80,255,.12)';x.lineWidth=.5;for(let i=0;i<cols;i++){x.beginPath();x.moveTo(i*SZ,0);x.lineTo(i*SZ,c.height);x.stroke()}for(let j=0;j<rows;j++){x.beginPath();x.moveTo(0,j*SZ);x.lineTo(c.width,j*SZ);x.stroke()}pulses.forEach((p,i)=>{x.beginPath();x.arc(p.x*c.width,p.y*c.height,p.r,0,Math.PI*2);x.strokeStyle='rgba(80,120,255,'+p.op+')';x.lineWidth=.8;x.stroke();p.r+=1.5;p.op-=.015;if(p.op<=0)pulses.splice(i,1)});requestAnimationFrame(drawF)}drawF();`,
-    /* ── new style anim here ── */
+var STYLE_ANIMS = {
+  cosmos:  'const S=Array.from({length:220},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.4+.2,p:Math.random()*Math.PI*2,sp:Math.random()*.008+.003}));function drawF(){x.clearRect(0,0,c.width,c.height);S.forEach(s=>{s.p+=s.sp;x.beginPath();x.arc(s.x*c.width,s.y*c.height,s.r,0,Math.PI*2);x.fillStyle="rgba(180,210,255,"+(0.25+0.65*Math.abs(Math.sin(s.p)))+")";x.fill()});requestAnimationFrame(drawF)}drawF();',
+  rain:    'const D=Array.from({length:160},()=>({x:Math.random(),y:Math.random(),l:Math.random()*18+8,s:Math.random()*7+3,o:Math.random()*.4+.08}));function drawF(){x.clearRect(0,0,c.width,c.height);D.forEach(d=>{x.strokeStyle="rgba(0,180,240,"+d.o+")";x.lineWidth=.6;x.beginPath();x.moveTo(d.x*c.width,d.y*c.height);x.lineTo(d.x*c.width-1.5,d.y*c.height+d.l);x.stroke();d.y+=d.s/c.height;if(d.y>1){d.y=0;d.x=Math.random()}});requestAnimationFrame(drawF)}drawF();',
+  matrix:  'const drops=[];function rs2(){drops.length=0;for(let i=0;i<Math.floor(c.width/16);i++)drops.push(Math.random()*c.height/16)}rs2();window.addEventListener("resize",rs2);const CH="01\u30A2\u30A4\u30A6\u30A8\u30AA\u30AB\u30AD";function drawF(){x.fillStyle="rgba(0,0,0,.06)";x.fillRect(0,0,c.width,c.height);x.fillStyle="#00cc44";x.font="13px monospace";drops.forEach((y,i)=>{x.fillText(CH[Math.floor(Math.random()*CH.length)],i*16,y*16);if(y*16>c.height&&Math.random()>.975)drops[i]=0;drops[i]++});requestAnimationFrame(drawF)}drawF();',
+  forge:   'c.style.position="absolute";c.style.bottom="0";c.style.top="auto";c.height=200;const buf=()=>new Float32Array(c.width*c.height);let b=buf(),b2=buf();function drawF(){for(let i=c.width*(c.height-1);i<c.width*c.height;i++)b[i]=Math.random()>.4?255:0;for(let y=1;y<c.height-1;y++)for(let px=0;px<c.width;px++){const v=(b[(y+1)*c.width+px]+b[(y+1)*c.width+(px-1+c.width)%c.width]+b[(y+1)*c.width+(px+1)%c.width]+b[y*c.width+px])/4.05;b2[(y-1)*c.width+px]=Math.max(0,v-.9)}const t=b;b=b2;const id=x.createImageData(c.width,c.height);for(let i=0;i<c.width*c.height;i++){const v=Math.min(255,t[i]);id.data[i*4]=Math.min(255,v*1.9);id.data[i*4+1]=Math.max(0,v*.55-20);id.data[i*4+2]=0;id.data[i*4+3]=Math.min(210,v*1.1)}x.putImageData(id,0,0);requestAnimationFrame(drawF)}drawF();',
+  abyss:   'let t=0;function drawF(){x.clearRect(0,0,c.width,c.height);t+=.008;for(let i=0;i<7;i++){x.beginPath();const base=c.height*(.5+i*.07);x.moveTo(0,base);for(let px=0;px<=c.width;px+=5){const y=base+Math.sin(px*.007+t*(0.5+i*.08))*22+Math.sin(px*.014-t*.3)*(10+i*3);x.lineTo(px,y)}x.lineTo(c.width,c.height);x.lineTo(0,c.height);x.closePath();x.fillStyle="rgba(0,"+(90+i*12)+","+(110+i*8)+","+(0.13-i*.01)+")";x.fill()}requestAnimationFrame(drawF)}drawF();',
+  noir:    'function noise(){const id=x.createImageData(c.width,c.height);const d=id.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=30}x.putImageData(id,0,0);setTimeout(noise,60)}noise();',
+  blizzard:'const F=Array.from({length:130},()=>({x:Math.random(),y:Math.random(),r:Math.random()*2.2+.4,s:Math.random()*1.2+.25,w:Math.random()*1.2-.6,o:Math.random()*.4+.15,p:Math.random()*6}));let t=0;function drawF(){x.clearRect(0,0,c.width,c.height);t+=.01;F.forEach(f=>{f.p+=.01;x.beginPath();x.arc(f.x*c.width,f.y*c.height,f.r,0,Math.PI*2);x.fillStyle="rgba(200,220,255,"+f.o+")";x.fill();f.y+=f.s/c.height;f.x+=Math.sin(t+f.p)*(f.w/c.width);if(f.y>1){f.y=0;f.x=Math.random()}if(f.x<0)f.x=1;if(f.x>1)f.x=0});requestAnimationFrame(drawF)}drawF();',
+  grid:    'const pulses=[];setInterval(()=>{if(pulses.length<8)pulses.push({x:Math.random(),y:Math.random(),r:0,op:.6})},800);const SZ=60;function drawF(){x.clearRect(0,0,c.width,c.height);const cols=Math.ceil(c.width/SZ)+1,rows=Math.ceil(c.height/SZ)+1;x.strokeStyle="rgba(60,80,255,.12)";x.lineWidth=.5;for(let i=0;i<cols;i++){x.beginPath();x.moveTo(i*SZ,0);x.lineTo(i*SZ,c.height);x.stroke()}for(let j=0;j<rows;j++){x.beginPath();x.moveTo(0,j*SZ);x.lineTo(c.width,j*SZ);x.stroke()}pulses.forEach((p,i)=>{x.beginPath();x.arc(p.x*c.width,p.y*c.height,p.r,0,Math.PI*2);x.strokeStyle="rgba(80,120,255,"+p.op+")";x.lineWidth=.8;x.stroke();p.r+=1.5;p.op-=.015;if(p.op<=0)pulses.splice(i,1)});requestAnimationFrame(drawF)}drawF();',
+  /* new style anim here */
 };
 
-const THUMB_RENDERERS = {
-    cosmos(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010510';x.fillRect(0,0,W,H);const S=Array.from({length:60},()=>({px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.2+.2,p:Math.random()*Math.PI*2,sp:Math.random()*.02+.005}));(function l(){x.fillStyle='rgba(1,5,16,.25)';x.fillRect(0,0,W,H);S.forEach(s=>{s.p+=s.sp;x.beginPath();x.arc(s.px,s.py,s.r,0,Math.PI*2);x.fillStyle='rgba(180,210,255,'+(0.3+0.6*Math.abs(Math.sin(s.p)))+')';x.fill()});requestAnimationFrame(l)})();},
-    rain(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#030d15';x.fillRect(0,0,W,H);const D=Array.from({length:40},()=>({px:Math.random()*W,py:Math.random()*H,l:Math.random()*10+4,s:Math.random()*3+1.5,o:Math.random()*.35+.08}));(function l(){x.fillStyle='rgba(3,13,21,.3)';x.fillRect(0,0,W,H);D.forEach(d=>{x.strokeStyle='rgba(0,180,240,'+d.o+')';x.lineWidth=.5;x.beginPath();x.moveTo(d.px,d.py);x.lineTo(d.px-1,d.py+d.l);x.stroke();d.py+=d.s;if(d.py>H){d.py=0;d.px=Math.random()*W}});requestAnimationFrame(l)})();},
-    matrix(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#000800';x.fillRect(0,0,W,H);const cols=Math.floor(W/8),drops=Array.from({length:cols},()=>Math.random()*H/8),CH='01アイ';(function l(){x.fillStyle='rgba(0,8,0,.08)';x.fillRect(0,0,W,H);x.fillStyle='#00cc44';x.font='7px monospace';drops.forEach((y,i)=>{x.fillText(CH[Math.floor(Math.random()*CH.length)],i*8,y*8);if(y*8>H&&Math.random()>.97)drops[i]=0;drops[i]++});requestAnimationFrame(l)})();},
-    forge(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#060100';x.fillRect(0,0,W,H);const buf=()=>new Float32Array(W*H);let b=buf(),b2=buf();(function l(){for(let i=W*(H-1);i<W*H;i++)b[i]=Math.random()>.45?255:0;for(let y=1;y<H-1;y++)for(let px=0;px<W;px++){const v=(b[(y+1)*W+px]+b[(y+1)*W+(px-1+W)%W]+b[(y+1)*W+(px+1)%W]+b[y*W+px])/4.05;b2[(y-1)*W+px]=Math.max(0,v-.9)}const t=b;b=b2;const id=x.createImageData(W,H);for(let i=0;i<W*H;i++){const v=Math.min(255,t[i]);id.data[i*4]=Math.min(255,v*1.9);id.data[i*4+1]=Math.max(0,v*.55-20);id.data[i*4+2]=0;id.data[i*4+3]=Math.min(210,v*1.1)}x.putImageData(id,0,0);requestAnimationFrame(l)})();},
-    abyss(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010b10';x.fillRect(0,0,W,H);let t=0;(function l(){x.fillStyle='rgba(1,11,16,.25)';x.fillRect(0,0,W,H);t+=.012;for(let i=0;i<6;i++){x.beginPath();const base=H*(.55+i*.07);x.moveTo(0,base);for(let px=0;px<=W;px+=3){const y=base+Math.sin(px*.015+t*(0.5+i*.1))*8+Math.sin(px*.03-t*.3)*(4+i*1.5);x.lineTo(px,y)}x.lineTo(W,H);x.lineTo(0,H);x.closePath();x.fillStyle='rgba(0,'+(90+i*12)+','+(110+i*8)+','+(0.18-i*.01)+')';x.fill()}requestAnimationFrame(l)})();},
-    noir(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#080808';x.fillRect(0,0,W,H);(function noise(){const id=x.createImageData(W,H);const d=id.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=22}x.putImageData(id,0,0);setTimeout(noise,80)})();let sy=0;(function s(){x.fillStyle='rgba(255,255,255,.05)';x.fillRect(0,sy%H,W,1);sy+=1.2;requestAnimationFrame(s)})();},
-    blizzard(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#040810';x.fillRect(0,0,W,H);const F=Array.from({length:35},()=>({px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.8+.3,s:Math.random()*1+.2,w:Math.random()*.8-.4,o:Math.random()*.35+.12,ph:Math.random()*6}));let t=0;(function l(){x.fillStyle='rgba(4,8,16,.25)';x.fillRect(0,0,W,H);t+=.01;F.forEach(f=>{f.ph+=.01;x.beginPath();x.arc(f.px,f.py,f.r,0,Math.PI*2);x.fillStyle='rgba(200,220,255,'+f.o+')';x.fill();f.py+=f.s;f.px+=Math.sin(t+f.ph)*f.w;if(f.py>H){f.py=0;f.px=Math.random()*W}if(f.px<0)f.px=W;if(f.px>W)f.px=0});requestAnimationFrame(l)})();},
-    grid(cv){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010108';x.fillRect(0,0,W,H);const SZ=14,pulses=[];setInterval(()=>{if(pulses.length<4)pulses.push({px:Math.random()*W,py:Math.random()*H,r:0,op:.5})},600);(function l(){x.clearRect(0,0,W,H);x.fillStyle='#010108';x.fillRect(0,0,W,H);x.strokeStyle='rgba(60,80,255,.15)';x.lineWidth=.4;for(let i=0;i<Math.ceil(W/SZ)+1;i++){x.beginPath();x.moveTo(i*SZ,0);x.lineTo(i*SZ,H);x.stroke()}for(let j=0;j<Math.ceil(H/SZ)+1;j++){x.beginPath();x.moveTo(0,j*SZ);x.lineTo(W,j*SZ);x.stroke()}pulses.forEach((p,i)=>{x.beginPath();x.arc(p.px,p.py,p.r,0,Math.PI*2);x.strokeStyle='rgba(80,120,255,'+p.op+')';x.lineWidth=.6;x.stroke();p.r+=1;p.op-=.015;if(p.op<=0)pulses.splice(i,1)});requestAnimationFrame(l)})();},
-    /* ── new style thumb renderer here ── */
+var THUMB_RENDERERS = {
+  cosmos:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010510';x.fillRect(0,0,W,H);var S=Array.from({length:60},function(){return{px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.2+.2,p:Math.random()*Math.PI*2,sp:Math.random()*.02+.005}});(function l(){x.fillStyle='rgba(1,5,16,.25)';x.fillRect(0,0,W,H);S.forEach(function(s){s.p+=s.sp;x.beginPath();x.arc(s.px,s.py,s.r,0,Math.PI*2);x.fillStyle='rgba(180,210,255,'+(0.3+0.6*Math.abs(Math.sin(s.p)))+')';x.fill()});requestAnimationFrame(l)})();},
+  rain:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#030d15';x.fillRect(0,0,W,H);var D=Array.from({length:40},function(){return{px:Math.random()*W,py:Math.random()*H,l:Math.random()*10+4,s:Math.random()*3+1.5,o:Math.random()*.35+.08}});(function l(){x.fillStyle='rgba(3,13,21,.3)';x.fillRect(0,0,W,H);D.forEach(function(d){x.strokeStyle='rgba(0,180,240,'+d.o+')';x.lineWidth=.5;x.beginPath();x.moveTo(d.px,d.py);x.lineTo(d.px-1,d.py+d.l);x.stroke();d.py+=d.s;if(d.py>H){d.py=0;d.px=Math.random()*W}});requestAnimationFrame(l)})();},
+  matrix:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#000800';x.fillRect(0,0,W,H);var cols=Math.floor(W/8),drops=Array.from({length:cols},function(){return Math.random()*H/8}),CH='01\u30A2\u30A4';(function l(){x.fillStyle='rgba(0,8,0,.08)';x.fillRect(0,0,W,H);x.fillStyle='#00cc44';x.font='7px monospace';drops.forEach(function(y,i){x.fillText(CH[Math.floor(Math.random()*CH.length)],i*8,y*8);if(y*8>H&&Math.random()>.97)drops[i]=0;drops[i]++});requestAnimationFrame(l)})();},
+  forge:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#060100';x.fillRect(0,0,W,H);var buf=function(){return new Float32Array(W*H)};var b=buf(),b2=buf();(function l(){for(var i=W*(H-1);i<W*H;i++)b[i]=Math.random()>.45?255:0;for(var y=1;y<H-1;y++)for(var px=0;px<W;px++){var v=(b[(y+1)*W+px]+b[(y+1)*W+(px-1+W)%W]+b[(y+1)*W+(px+1)%W]+b[y*W+px])/4.05;b2[(y-1)*W+px]=Math.max(0,v-.9)}var t=b;b=b2;var id=x.createImageData(W,H);for(var i=0;i<W*H;i++){var v=Math.min(255,t[i]);id.data[i*4]=Math.min(255,v*1.9);id.data[i*4+1]=Math.max(0,v*.55-20);id.data[i*4+2]=0;id.data[i*4+3]=Math.min(210,v*1.1)}x.putImageData(id,0,0);requestAnimationFrame(l)})();},
+  abyss:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010b10';x.fillRect(0,0,W,H);var t=0;(function l(){x.fillStyle='rgba(1,11,16,.25)';x.fillRect(0,0,W,H);t+=.012;for(var i=0;i<6;i++){x.beginPath();var base=H*(.55+i*.07);x.moveTo(0,base);for(var px=0;px<=W;px+=3){var y=base+Math.sin(px*.015+t*(0.5+i*.1))*8+Math.sin(px*.03-t*.3)*(4+i*1.5);x.lineTo(px,y)}x.lineTo(W,H);x.lineTo(0,H);x.closePath();x.fillStyle='rgba(0,'+(90+i*12)+','+(110+i*8)+','+(0.18-i*.01)+')';x.fill()}requestAnimationFrame(l)})();},
+  noir:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#080808';x.fillRect(0,0,W,H);(function noise(){var id=x.createImageData(W,H);var d=id.data;for(var i=0;i<d.length;i+=4){var v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=22}x.putImageData(id,0,0);setTimeout(noise,80)})();var sy=0;(function s(){x.fillStyle='rgba(255,255,255,.05)';x.fillRect(0,sy%H,W,1);sy+=1.2;requestAnimationFrame(s)})();},
+  blizzard:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#040810';x.fillRect(0,0,W,H);var F=Array.from({length:35},function(){return{px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.8+.3,s:Math.random()*1+.2,w:Math.random()*.8-.4,o:Math.random()*.35+.12,ph:Math.random()*6}});var t=0;(function l(){x.fillStyle='rgba(4,8,16,.25)';x.fillRect(0,0,W,H);t+=.01;F.forEach(function(f){f.ph+=.01;x.beginPath();x.arc(f.px,f.py,f.r,0,Math.PI*2);x.fillStyle='rgba(200,220,255,'+f.o+')';x.fill();f.py+=f.s;f.px+=Math.sin(t+f.ph)*f.w;if(f.py>H){f.py=0;f.px=Math.random()*W}if(f.px<0)f.px=W;if(f.px>W)f.px=0});requestAnimationFrame(l)})();},
+  grid:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010108';x.fillRect(0,0,W,H);var SZ=14,pulses=[];setInterval(function(){if(pulses.length<4)pulses.push({px:Math.random()*W,py:Math.random()*H,r:0,op:.5})},600);(function l(){x.clearRect(0,0,W,H);x.fillStyle='#010108';x.fillRect(0,0,W,H);x.strokeStyle='rgba(60,80,255,.15)';x.lineWidth=.4;for(var i=0;i<Math.ceil(W/SZ)+1;i++){x.beginPath();x.moveTo(i*SZ,0);x.lineTo(i*SZ,H);x.stroke()}for(var j=0;j<Math.ceil(H/SZ)+1;j++){x.beginPath();x.moveTo(0,j*SZ);x.lineTo(W,j*SZ);x.stroke()}pulses.forEach(function(p,i){x.beginPath();x.arc(p.px,p.py,p.r,0,Math.PI*2);x.strokeStyle='rgba(80,120,255,'+p.op+')';x.lineWidth=.6;x.stroke();p.r+=1;p.op-=.015;if(p.op<=0)pulses.splice(i,1)});requestAnimationFrame(l)})();},
+  /* new style thumb renderer here */
 };
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════
    GENERATOR — style picker
-═══════════════════════════════════════════ */
-let selected = 'cosmos', genHtml = '';
+═══════════════════════════════════════ */
+var selected = 'cosmos', genHtml = '';
 
 (function buildStylePicker() {
-    const grid = document.getElementById('style-grid');
-    STYLES.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'scard' + (s.id===selected?' sel':'');
-        div.dataset.style = s.id;
-        div.onclick = () => pickStyle(s.id);
-        const cv = document.createElement('canvas');
-        cv.width=200; cv.height=113;
-        div.appendChild(cv);
-        if (THUMB_RENDERERS[s.id]) THUMB_RENDERERS[s.id](cv);
-        const lbl = document.createElement('div');
-        lbl.className='scard-label'; lbl.textContent=s.name;
-        div.appendChild(lbl);
-        const dot = document.createElement('div');
-        dot.className='sel-dot'; div.appendChild(dot);
-        grid.appendChild(div);
-    });
+  var grid = document.getElementById('style-grid');
+  STYLES.forEach(function(s) {
+    var div = document.createElement('div');
+    div.className = 'scard' + (s.id===selected?' sel':'');
+    div.dataset.style = s.id;
+    div.onclick = function(){ pickStyle(s.id); };
+    var cv = document.createElement('canvas');
+    cv.width=200; cv.height=113;
+    div.appendChild(cv);
+    if (THUMB_RENDERERS[s.id]) THUMB_RENDERERS[s.id](cv);
+    var lbl = document.createElement('div');
+    lbl.className='scard-label'; lbl.textContent=s.name;
+    div.appendChild(lbl);
+    var dot = document.createElement('div');
+    dot.className='sel-dot'; div.appendChild(dot);
+    grid.appendChild(div);
+  });
 })();
 
 function pickStyle(id) {
-    selected = id;
-    document.querySelectorAll('.scard').forEach(el => el.classList.toggle('sel', el.dataset.style===id));
+  selected = id;
+  document.querySelectorAll('.scard').forEach(function(el){
+    el.classList.toggle('sel', el.dataset.style===id);
+  });
 }
-function pickRandom() { pickStyle(STYLES[Math.floor(Math.random()*STYLES.length)].id); generate(); }
-
+function pickRandom() {
+  pickStyle(STYLES[Math.floor(Math.random()*STYLES.length)].id);
+  generate();
+}
 function generate() {
-    const tema    = document.getElementById('tema').value.trim() || 'Topic';
-    const user    = document.getElementById('user').value.trim() || 'Author';
-    const imagery = document.getElementById('show-imagery').checked;
-    genHtml = buildIntroHTML(selected, tema, user, imagery);
-    document.getElementById('pframe').srcdoc = genHtml;
-    document.getElementById('cout').textContent = genHtml;
-    document.getElementById('out-wrap').style.display = 'block';
-    switchOutTab('preview');
+  var tema    = document.getElementById('tema').value.trim() || 'Topic';
+  var user    = document.getElementById('user').value.trim() || 'Author';
+  var imagery = document.getElementById('show-imagery').checked;
+  genHtml = buildIntroHTML(selected, tema, user, imagery);
+  document.getElementById('pframe').srcdoc = genHtml;
+  document.getElementById('cout').textContent = genHtml;
+  document.getElementById('out-wrap').style.display = 'block';
+  switchOutTab('preview');
 }
+
+/* ─────────────────────────────────────────
+   copyGenCode — fixed: own copy logic,
+   no dependency on card/overlay objects
+───────────────────────────────────────── */
 function copyGenCode() {
-    copyText(genHtml, null);
-    const b = document.getElementById('copy-gen-btn');
-    b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy HTML',2200);
+  if (!genHtml) {
+    showToast('Generate an intro first!', false);
+    return;
+  }
+  var btn = document.getElementById('copy-gen-btn');
+  copyToClipboard(genHtml, function() {
+    btn.textContent = 'Copied!';
+    showToast('CODE COPIED \u2014 paste into Eliflar!');
+    setTimeout(function(){ btn.textContent='Copy HTML'; }, 2200);
+  }, function() {
+    showToast('Copy failed \u2014 try again', false);
+  });
 }
 
-/* ═══════════════════════════════════════════
-   GENERATOR — build exported HTML
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   BUILD EXPORTED INTRO HTML
+═══════════════════════════════════════ */
 function buildIntroHTML(styleId, tema, user, imagery) {
-    const cfg  = STYLE_CONFIGS[styleId] || STYLE_CONFIGS.cosmos;
-    const anim = STYLE_ANIMS[styleId]   || STYLE_ANIMS.cosmos;
-    const imgBlock = imagery ? `<div class="label">IMAGERY</div><div class="divider"></div>` : '';
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:${cfg.bg};width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',system-ui,sans-serif}
-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-.stage{position:relative;z-index:10;text-align:center;width:90%;max-width:560px;animation:fadeIn 1.2s ease}
-.frame{position:relative;overflow:hidden;border:1px solid ${cfg.bc};padding:clamp(28px,6vw,60px) clamp(22px,8vw,80px);background:${cfg.overlay};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.frame::after{content:"";position:absolute;top:0;left:-160%;width:55%;height:100%;background:linear-gradient(to right,transparent,${cfg.shine},transparent);transform:skewX(-22deg);animation:shine 4s 1.5s infinite ease-out}
-.corner{position:absolute;width:12px;height:12px;border-color:${cfg.acc};border-style:solid}
-.corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}.corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
-.corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}.corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
-.inner{position:relative;z-index:1}
-.label{letter-spacing:.55em;font-size:clamp(9px,1.5vw,11px);color:${cfg.lc};text-transform:uppercase;margin-bottom:clamp(10px,2.5vw,18px)}
-.divider{width:32px;height:1px;background:${cfg.acc};opacity:.4;margin:0 auto 14px}
-.theme{font-size:clamp(20px,5.5vw,42px);font-weight:200;color:${cfg.tc};text-transform:uppercase;letter-spacing:.15em;line-height:1.15}
-.sep{width:24px;height:1px;background:${cfg.acc};opacity:.3;margin:14px auto}
-.user{font-size:clamp(10px,1.8vw,14px);color:${cfg.uc};letter-spacing:.25em;text-transform:uppercase}
-@keyframes shine{0%{left:-160%}45%{left:160%}100%{left:160%}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-</style>
-</head>
-<body>
-<canvas id="cv"></canvas>
-<div class="stage">
-  <div class="frame">
-    <div class="corner tl"></div><div class="corner tr"></div>
-    <div class="corner bl"></div><div class="corner br"></div>
-    <div class="inner">
-      ${imgBlock}
-      <div class="theme">${tema}</div>
-      <div class="sep"></div>
-      <div class="user">${user}</div>
-    </div>
-  </div>
-</div>
-<script>
-const c=document.getElementById('cv'),x=c.getContext('2d');
-function rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();
-window.addEventListener('resize',rs);
-${anim}
-<\/script>
-</body>
-</html>`;
+  var cfg  = STYLE_CONFIGS[styleId] || STYLE_CONFIGS.cosmos;
+  var anim = STYLE_ANIMS[styleId]   || STYLE_ANIMS.cosmos;
+  var imgBlock = imagery ? '<div class="label">IMAGERY</div><div class="divider"></div>' : '';
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">\n<style>\n*{margin:0;padding:0;box-sizing:border-box}\nbody{background:'+cfg.bg+';width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:\'Segoe UI\',system-ui,sans-serif}\ncanvas{position:absolute;top:0;left:0;width:100%;height:100%}\n.stage{position:relative;z-index:10;text-align:center;width:90%;max-width:560px;animation:fadeIn 1.2s ease}\n.frame{position:relative;overflow:hidden;border:1px solid '+cfg.bc+';padding:clamp(28px,6vw,60px) clamp(22px,8vw,80px);background:'+cfg.overlay+';backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}\n.frame::after{content:"";position:absolute;top:0;left:-160%;width:55%;height:100%;background:linear-gradient(to right,transparent,'+cfg.shine+',transparent);transform:skewX(-22deg);animation:shine 4s 1.5s infinite ease-out}\n.corner{position:absolute;width:12px;height:12px;border-color:'+cfg.acc+';border-style:solid}\n.corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}.corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}\n.corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}.corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}\n.inner{position:relative;z-index:1}\n.label{letter-spacing:.55em;font-size:clamp(9px,1.5vw,11px);color:'+cfg.lc+';text-transform:uppercase;margin-bottom:clamp(10px,2.5vw,18px)}\n.divider{width:32px;height:1px;background:'+cfg.acc+';opacity:.4;margin:0 auto 14px}\n.theme{font-size:clamp(20px,5.5vw,42px);font-weight:200;color:'+cfg.tc+';text-transform:uppercase;letter-spacing:.15em;line-height:1.15}\n.sep{width:24px;height:1px;background:'+cfg.acc+';opacity:.3;margin:14px auto}\n.user{font-size:clamp(10px,1.8vw,14px);color:'+cfg.uc+';letter-spacing:.25em;text-transform:uppercase}\n@keyframes shine{0%{left:-160%}45%{left:160%}100%{left:160%}}\n@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}\n</style>\n</head>\n<body>\n<canvas id="cv"></canvas>\n<div class="stage">\n  <div class="frame">\n    <div class="corner tl"></div><div class="corner tr"></div>\n    <div class="corner bl"></div><div class="corner br"></div>\n    <div class="inner">\n      '+imgBlock+'\n      <div class="theme">'+tema+'</div>\n      <div class="sep"></div>\n      <div class="user">'+user+'</div>\n    </div>\n  </div>\n</div>\n<script>\nconst c=document.getElementById("cv"),x=c.getContext("2d");\nfunction rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();\nwindow.addEventListener("resize",rs);\n'+anim+'\n<\/script>\n</body>\n</html>';
 }
 
-/* ── INIT ── */
+/* INIT */
 buildGallery();
 </script>
 </body>
