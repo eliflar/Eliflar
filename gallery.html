@@ -45,10 +45,38 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
 .fields-row { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:12px; }
 .field { display:flex; flex-direction:column; gap:5px; flex:1; min-width:150px; }
 .field label { font-size:12px; color:rgba(240,230,210,.55); }
-.field input { background:rgba(10,31,36,.9); border:1px solid var(--border); color:var(--cream); border-radius:6px; padding:9px 11px; font-size:13px; outline:none; width:100%; font-family:inherit; transition:border-color .2s; }
-.field input:focus { border-color:var(--cyan); }
-.toggle-row { display:flex; align-items:center; gap:8px; }
+.field input[type=text] { background:rgba(10,31,36,.9); border:1px solid var(--border); color:var(--cream); border-radius:6px; padding:9px 11px; font-size:13px; outline:none; width:100%; font-family:inherit; transition:border-color .2s; }
+.field input[type=text]:focus { border-color:var(--cyan); }
+.toggle-row { display:flex; align-items:center; gap:8px; margin-top:6px; }
 .toggle-row label { font-size:12px; color:rgba(240,230,210,.55); cursor:pointer; }
+
+/* ── Image URL section ── */
+.img-section { margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+.img-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.img-toggle-label { font-size:12px; font-weight:700; color:var(--cream); cursor:pointer; }
+.img-badge { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:rgba(0,255,255,.1); color:var(--cyan); border:1px solid rgba(0,255,255,.25); padding:2px 8px; border-radius:10px; }
+.img-body { display:none; }
+.img-body.open { display:block; }
+.url-input-wrap { position:relative; }
+.url-input-wrap input { padding-right:36px !important; }
+.url-clear { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:rgba(240,230,210,.4); cursor:pointer; font-size:16px; line-height:1; padding:0; }
+.url-clear:hover { color:var(--cream); }
+
+/* Source pills */
+.src-pills { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.pill { padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; cursor:pointer; border:1px solid var(--border); background:transparent; color:rgba(240,230,210,.5); transition:.15s; white-space:nowrap; }
+.pill:hover { border-color:var(--cyan); color:var(--cyan); }
+.pill.active { background:rgba(0,255,255,.12); border-color:var(--cyan); color:var(--cyan); }
+
+/* Img position select */
+.img-opts { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; align-items:center; }
+.img-opts label { font-size:12px; color:rgba(240,230,210,.55); }
+.img-opts select { background:rgba(10,31,36,.9); border:1px solid var(--border); color:var(--cream); border-radius:6px; padding:6px 10px; font-size:12px; outline:none; font-family:inherit; cursor:pointer; }
+.img-opts select:focus { border-color:var(--cyan); }
+
+/* Img preview thumbnail */
+.url-status { font-size:11px; margin-top:7px; letter-spacing:.5px; min-height:16px; }
+
 .style-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:10px; }
 .scard { border:2px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; position:relative; aspect-ratio:16/9; transition:transform .15s,border-color .15s; }
 .scard:hover { transform:scale(1.04); border-color:rgba(0,255,255,.4); }
@@ -86,14 +114,11 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
 <!-- ═══════════════════════════════════════════════════════════
      TAB 1 — GALLERY
      HOW TO ADD A NEW INTRO (3-4 lines):
-
        <div class="card" data-file="intros/NAME.html">
            <div class="card-name">Display Name</div>
            <div class="card-sub">Short description</div>
        </div>
-
-     Place it below the "ADD MORE INTROS" comment.
-     No images needed — thumbnails render live from the HTML.
+     No images needed — thumbnails render live.
 ════════════════════════════════════════════════════════════ -->
 <div class="panel active" id="panel-gallery">
   <div class="page-header">
@@ -114,59 +139,57 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
       <div class="card-name">Classic Imagery</div>
       <div class="card-sub">Original dark style</div>
     </div>
-
     <!-- ── INTRO 2 ── -->
     <div class="card" data-file="intros/modern.html">
       <div class="card-name">Modern Flare</div>
-      <div class="card-sub">Clean & minimal</div>
+      <div class="card-sub">Clean &amp; minimal</div>
     </div>
-
     <!-- ── INTRO 3 ── -->
     <div class="card" data-file="intros/storm.html">
       <div class="card-name">Storm Tracker</div>
       <div class="card-sub">Electric atmosphere</div>
     </div>
-
     <!-- ── INTRO 4 ── -->
     <div class="card" data-file="intros/intro_cinematic.html">
       <div class="card-name">Cinematic</div>
       <div class="card-sub">Cinematic move</div>
     </div>
-
     <!-- ── INTRO 5 ── -->
     <div class="card" data-file="intros/intro_glitch.html">
       <div class="card-name">Glitch</div>
       <div class="card-sub">Glitch up</div>
     </div>
-
     <!-- ── INTRO 6 ── -->
     <div class="card" data-file="intros/intro_letters.html">
       <div class="card-name">Letters</div>
       <div class="card-sub">Letters path</div>
     </div>
-
     <!-- ── INTRO 7 ── -->
     <div class="card" data-file="intros/intro_shockwave.html">
       <div class="card-name">Shockwave</div>
       <div class="card-sub">Shockwave</div>
     </div>
-
     <!-- ── INTRO 8 ── -->
     <div class="card" data-file="intros/intro_typewriter.html">
       <div class="card-name">Typewriter</div>
       <div class="card-sub">Typewriter</div>
     </div>
-
-    <!-- ── INTRO 8 ── -->
+    <!-- ── INTRO 9 ── -->
     <div class="card" data-file="intros/intro_landscape.html">
       <div class="card-name">Landscape</div>
-      <div class="card-sub">Landscape</div>
+      <div class="card-sub">Abstract waves</div>
     </div>
-    
+    <!-- ── INTRO 10 ── -->
+    <div class="card" data-file="intros/intro_dig.html">
+      <div class="card-name">Dig Deep</div>
+      <div class="card-sub">Touch to dig layers</div>
+    </div>
+
     <!-- ── ADD MORE INTROS BELOW ── -->
 
   </div>
 </div>
+
 
 <!-- ═══════════════════════════════════════
      TAB 2 — GENERATOR
@@ -176,6 +199,8 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
     <h2>Intro Generator</h2>
     <p>Build a custom intro — copy the HTML into Eliflar</p>
   </div>
+
+  <!-- Content -->
   <div class="gen-section">
     <div class="sec-label">Content</div>
     <div class="fields-row">
@@ -192,15 +217,89 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
       <input type="checkbox" id="show-imagery" checked />
       <label for="show-imagery">Show IMAGERY label</label>
     </div>
+
+    <!-- ══ IMAGE URL SECTION ══════════════════════════════ -->
+    <div class="img-section">
+      <div class="img-header">
+        <input type="checkbox" id="use-image" onchange="toggleImgSection()" />
+        <label class="img-toggle-label" for="use-image">Use background image</label>
+        <span class="img-badge">optional</span>
+      </div>
+
+      <div class="img-body" id="img-body">
+
+        <!-- Quick-source pills -->
+        <div style="font-size:11px;color:rgba(240,230,210,.4);margin-bottom:7px;letter-spacing:.5px;">
+          Paste a direct image URL — or pick a reliable source:
+        </div>
+        <div class="src-pills" id="src-pills">
+          <button class="pill" onclick="setSrc('imgur')">Imgur</button>
+          <button class="pill" onclick="setSrc('github')">GitHub Raw</button>
+          <button class="pill" onclick="setSrc('wikimedia')">Wikimedia</button>
+          <button class="pill" onclick="setSrc('picsum')">Picsum (random)</button>
+          <button class="pill" onclick="setSrc('unsplash')">Unsplash</button>
+        </div>
+
+        <!-- URL input -->
+        <div class="field">
+          <label>Image URL</label>
+          <div class="url-input-wrap">
+            <input type="text" id="img-url"
+              placeholder="https://i.imgur.com/XXXXX.jpg"
+              oninput="onUrlChange()" />
+            <div class="url-status" id="url-status"></div>
+            <button class="url-clear" onclick="clearUrl()" title="Clear">&#215;</button>
+          </div>
+        </div>
+
+        <!-- Image options -->
+        <div class="img-opts">
+          <label>Position:</label>
+          <select id="img-pos">
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+          <label style="margin-left:8px">Size:</label>
+          <select id="img-size">
+            <option value="cover">Cover (fill)</option>
+            <option value="contain">Contain (fit)</option>
+            <option value="auto">Auto</option>
+          </select>
+          <label style="margin-left:8px">Overlay:</label>
+          <select id="img-overlay">
+            <option value="0.55">Dark 55%</option>
+            <option value="0.35">Dark 35%</option>
+            <option value="0.70">Dark 70%</option>
+            <option value="0.15">Light 15%</option>
+            <option value="0">None</option>
+          </select>
+        </div>
+
+        <!-- Fallback note -->
+        <div style="font-size:11px;color:rgba(240,230,210,.3);margin-top:8px;line-height:1.5">
+          &#9432; If the image fails to load in WebView, the animated canvas background
+          will show instead — no broken layout.
+        </div>
+      </div>
+    </div>
+    <!-- ══ END IMAGE URL SECTION ══════════════════════════ -->
+
   </div>
+
+  <!-- Style picker -->
   <div class="gen-section">
-    <div class="sec-label">Visual Style</div>
+    <div class="sec-label">Visual Style <span style="font-size:10px;opacity:.5;font-weight:400;">(used as fallback if image is set)</span></div>
     <div class="style-grid" id="style-grid"></div>
   </div>
+
   <div class="btn-row">
     <button class="eliflar-btn" onclick="generate()">Generate Intro</button>
     <button class="rand-btn"    onclick="pickRandom()">&#9654; Random</button>
   </div>
+
   <div class="out-wrap" id="out-wrap" style="display:none;">
     <div class="out-head">
       <div class="out-tabs">
@@ -218,7 +317,7 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
 
 <script>
 /* ═══════════════════════════════════════
-   UI
+   UI HELPERS
 ═══════════════════════════════════════ */
 function switchTab(t) {
   ['gallery','generator'].forEach(function(id) {
@@ -241,7 +340,7 @@ function showToast(msg, ok) {
 }
 
 /* ═══════════════════════════════════════
-   UNIVERSAL COPY — clipboard API + execCommand fallback
+   CLIPBOARD
 ═══════════════════════════════════════ */
 function copyToClipboard(text, onOk, onFail) {
   if (!text) { if (onFail) onFail(); return; }
@@ -249,37 +348,74 @@ function copyToClipboard(text, onOk, onFail) {
     navigator.clipboard.writeText(text).then(function(){
       if (onOk) onOk();
     }).catch(function(){ legacyExec(text, onOk, onFail); });
-  } else {
-    legacyExec(text, onOk, onFail);
-  }
+  } else { legacyExec(text, onOk, onFail); }
 }
 function legacyExec(text, onOk, onFail) {
   try {
     var ta = document.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;width:1px;height:1px';
-    document.body.appendChild(ta);
-    ta.focus(); ta.select();
+    document.body.appendChild(ta); ta.focus(); ta.select();
     var ok = document.execCommand('copy');
     document.body.removeChild(ta);
-    if (ok) { if (onOk)   onOk(); }
-    else    { if (onFail) onFail(); }
+    if (ok) { if (onOk) onOk(); } else { if (onFail) onFail(); }
   } catch(e) { if (onFail) onFail(); }
 }
 
 /* ═══════════════════════════════════════
-   GALLERY — lazy iframe thumbnails + tap to copy
+   IMAGE URL SECTION
+═══════════════════════════════════════ */
+/* Source templates — placeholders the user will replace */
+var SRC_TEMPLATES = {
+  imgur:     'https://i.imgur.com/XXXXXXX.jpg',
+  github:    'https://raw.githubusercontent.com/USER/REPO/main/image.jpg',
+  wikimedia: 'https://upload.wikimedia.org/wikipedia/commons/thumb/PATH/800px-FILE.jpg',
+  picsum:    'https://picsum.photos/1280/720',
+  unsplash:  'https://images.unsplash.com/photo-PHOTOID?w=1280&q=80'
+};
+
+function toggleImgSection() {
+  var open = document.getElementById('use-image').checked;
+  document.getElementById('img-body').classList.toggle('open', open);
+}
+
+function setSrc(key) {
+  document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('img-url').value = SRC_TEMPLATES[key];
+  onUrlChange();
+}
+
+function clearUrl() {
+  document.getElementById('img-url').value = '';
+  document.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('url-status').textContent = '';
+}
+
+function onUrlChange() {
+  var url = document.getElementById('img-url').value.trim();
+  var st  = document.getElementById('url-status');
+  if (url) {
+    st.textContent = '\u2713 URL set — will load in WebView';
+    st.style.color = 'rgba(0,255,255,.7)';
+  } else {
+    st.textContent = '';
+  }
+}
+
+/* ═══════════════════════════════════════
+   GALLERY
 ═══════════════════════════════════════ */
 function buildGallery() {
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;
-      var card   = entry.target;
+      var card = entry.target;
       var iframe = card.querySelector('iframe');
       if (iframe && !iframe.src) iframe.src = card.dataset.file;
       observer.unobserve(card);
     });
-  }, { rootMargin: '200px' });
+  }, { rootMargin:'200px' });
 
   document.querySelectorAll('#gallery-grid .card').forEach(function(card) {
     var file = card.dataset.file;
@@ -313,21 +449,14 @@ function buildGallery() {
     card.addEventListener('click', function() {
       card.classList.add('tapped');
       setTimeout(function(){ card.classList.remove('tapped'); }, 300);
-
-      /* try iframe content first (same-origin / file://) */
       var html = '';
       try {
         var doc = iframe.contentDocument || iframe.contentWindow.document;
-        if (doc && doc.documentElement) {
-          html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
-        }
+        if (doc && doc.documentElement) html = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
       } catch(e) {}
-
-      if (html) {
-        doCopy(html, overlay);
-      } else {
-        fetch(file)
-          .then(function(r){ return r.text(); })
+      if (html) { doCopy(html, overlay); }
+      else {
+        fetch(file).then(function(r){ return r.text(); })
           .then(function(t){ doCopy(t, overlay); })
           .catch(function(){ showToast('Could not read the file', false); });
       }
@@ -350,9 +479,9 @@ function doCopy(html, overlay) {
 }
 
 /* ═══════════════════════════════════════
-   GENERATOR — styles registry
-   To add a new style: one entry in each
-   of the four sections marked below.
+   GENERATOR STYLES REGISTRY
+   Add new style: one entry in each of the
+   four sections marked "add here".
 ═══════════════════════════════════════ */
 var STYLES = [
   { id:'cosmos',   name:'Cosmos',   sub:'Deep space'    },
@@ -363,7 +492,7 @@ var STYLES = [
   { id:'noir',     name:'Noir',     sub:'Film grain'    },
   { id:'blizzard', name:'Blizzard', sub:'Snowstorm'     },
   { id:'grid',     name:'Grid',     sub:'Tron / tech'   },
-  /* new style: { id:'NAME', name:'Label', sub:'Desc' } */
+  /* add here: { id:'NAME', name:'Label', sub:'Desc' } */
 ];
 
 var STYLE_CONFIGS = {
@@ -375,7 +504,7 @@ var STYLE_CONFIGS = {
   noir:     {bg:'#080808',acc:'rgba(255,255,255,.45)',lc:'rgba(255,255,255,.3)',tc:'#fff',uc:'rgba(255,255,255,.55)',bc:'rgba(255,255,255,.18)',overlay:'rgba(8,8,8,.93)',   shine:'rgba(255,255,255,.04)'},
   blizzard: {bg:'#040810',acc:'rgba(180,210,255,.55)',lc:'rgba(180,210,255,.35)',tc:'#fff',uc:'rgba(180,215,255,.68)',bc:'rgba(170,200,255,.22)',overlay:'rgba(3,6,14,.9)', shine:'rgba(180,210,255,.07)'},
   grid:     {bg:'#010108',acc:'rgba(80,110,255,.65)', lc:'rgba(80,120,255,.4)', tc:'#fff',uc:'rgba(100,140,255,.72)',bc:'rgba(70,100,255,.28)',overlay:'rgba(1,1,10,.92)',  shine:'rgba(80,120,255,.08)' },
-  /* new style config here */
+  /* add here */
 };
 
 var STYLE_ANIMS = {
@@ -387,7 +516,7 @@ var STYLE_ANIMS = {
   noir:    'function noise(){const id=x.createImageData(c.width,c.height);const d=id.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=30}x.putImageData(id,0,0);setTimeout(noise,60)}noise();',
   blizzard:'const F=Array.from({length:130},()=>({x:Math.random(),y:Math.random(),r:Math.random()*2.2+.4,s:Math.random()*1.2+.25,w:Math.random()*1.2-.6,o:Math.random()*.4+.15,p:Math.random()*6}));let t=0;function drawF(){x.clearRect(0,0,c.width,c.height);t+=.01;F.forEach(f=>{f.p+=.01;x.beginPath();x.arc(f.x*c.width,f.y*c.height,f.r,0,Math.PI*2);x.fillStyle="rgba(200,220,255,"+f.o+")";x.fill();f.y+=f.s/c.height;f.x+=Math.sin(t+f.p)*(f.w/c.width);if(f.y>1){f.y=0;f.x=Math.random()}if(f.x<0)f.x=1;if(f.x>1)f.x=0});requestAnimationFrame(drawF)}drawF();',
   grid:    'const pulses=[];setInterval(()=>{if(pulses.length<8)pulses.push({x:Math.random(),y:Math.random(),r:0,op:.6})},800);const SZ=60;function drawF(){x.clearRect(0,0,c.width,c.height);const cols=Math.ceil(c.width/SZ)+1,rows=Math.ceil(c.height/SZ)+1;x.strokeStyle="rgba(60,80,255,.12)";x.lineWidth=.5;for(let i=0;i<cols;i++){x.beginPath();x.moveTo(i*SZ,0);x.lineTo(i*SZ,c.height);x.stroke()}for(let j=0;j<rows;j++){x.beginPath();x.moveTo(0,j*SZ);x.lineTo(c.width,j*SZ);x.stroke()}pulses.forEach((p,i)=>{x.beginPath();x.arc(p.x*c.width,p.y*c.height,p.r,0,Math.PI*2);x.strokeStyle="rgba(80,120,255,"+p.op+")";x.lineWidth=.8;x.stroke();p.r+=1.5;p.op-=.015;if(p.op<=0)pulses.splice(i,1)});requestAnimationFrame(drawF)}drawF();',
-  /* new style anim here */
+  /* add here */
 };
 
 var THUMB_RENDERERS = {
@@ -399,11 +528,11 @@ var THUMB_RENDERERS = {
   noir:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#080808';x.fillRect(0,0,W,H);(function noise(){var id=x.createImageData(W,H);var d=id.data;for(var i=0;i<d.length;i+=4){var v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=22}x.putImageData(id,0,0);setTimeout(noise,80)})();var sy=0;(function s(){x.fillStyle='rgba(255,255,255,.05)';x.fillRect(0,sy%H,W,1);sy+=1.2;requestAnimationFrame(s)})();},
   blizzard:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#040810';x.fillRect(0,0,W,H);var F=Array.from({length:35},function(){return{px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.8+.3,s:Math.random()*1+.2,w:Math.random()*.8-.4,o:Math.random()*.35+.12,ph:Math.random()*6}});var t=0;(function l(){x.fillStyle='rgba(4,8,16,.25)';x.fillRect(0,0,W,H);t+=.01;F.forEach(function(f){f.ph+=.01;x.beginPath();x.arc(f.px,f.py,f.r,0,Math.PI*2);x.fillStyle='rgba(200,220,255,'+f.o+')';x.fill();f.py+=f.s;f.px+=Math.sin(t+f.ph)*f.w;if(f.py>H){f.py=0;f.px=Math.random()*W}if(f.px<0)f.px=W;if(f.px>W)f.px=0});requestAnimationFrame(l)})();},
   grid:function(cv){var x=cv.getContext('2d'),W=cv.width,H=cv.height;x.fillStyle='#010108';x.fillRect(0,0,W,H);var SZ=14,pulses=[];setInterval(function(){if(pulses.length<4)pulses.push({px:Math.random()*W,py:Math.random()*H,r:0,op:.5})},600);(function l(){x.clearRect(0,0,W,H);x.fillStyle='#010108';x.fillRect(0,0,W,H);x.strokeStyle='rgba(60,80,255,.15)';x.lineWidth=.4;for(var i=0;i<Math.ceil(W/SZ)+1;i++){x.beginPath();x.moveTo(i*SZ,0);x.lineTo(i*SZ,H);x.stroke()}for(var j=0;j<Math.ceil(H/SZ)+1;j++){x.beginPath();x.moveTo(0,j*SZ);x.lineTo(W,j*SZ);x.stroke()}pulses.forEach(function(p,i){x.beginPath();x.arc(p.px,p.py,p.r,0,Math.PI*2);x.strokeStyle='rgba(80,120,255,'+p.op+')';x.lineWidth=.6;x.stroke();p.r+=1;p.op-=.015;if(p.op<=0)pulses.splice(i,1)});requestAnimationFrame(l)})();},
-  /* new style thumb renderer here */
+  /* add here */
 };
 
 /* ═══════════════════════════════════════
-   GENERATOR — style picker
+   STYLE PICKER
 ═══════════════════════════════════════ */
 var selected = 'cosmos', genHtml = '';
 
@@ -415,12 +544,10 @@ var selected = 'cosmos', genHtml = '';
     div.dataset.style = s.id;
     div.onclick = function(){ pickStyle(s.id); };
     var cv = document.createElement('canvas');
-    cv.width=200; cv.height=113;
-    div.appendChild(cv);
+    cv.width=200; cv.height=113; div.appendChild(cv);
     if (THUMB_RENDERERS[s.id]) THUMB_RENDERERS[s.id](cv);
     var lbl = document.createElement('div');
-    lbl.className='scard-label'; lbl.textContent=s.name;
-    div.appendChild(lbl);
+    lbl.className='scard-label'; lbl.textContent=s.name; div.appendChild(lbl);
     var dot = document.createElement('div');
     dot.className='sel-dot'; div.appendChild(dot);
     grid.appendChild(div);
@@ -437,26 +564,28 @@ function pickRandom() {
   pickStyle(STYLES[Math.floor(Math.random()*STYLES.length)].id);
   generate();
 }
+
 function generate() {
-  var tema    = document.getElementById('tema').value.trim() || 'Topic';
-  var user    = document.getElementById('user').value.trim() || 'Author';
-  var imagery = document.getElementById('show-imagery').checked;
-  genHtml = buildIntroHTML(selected, tema, user, imagery);
+  var tema     = document.getElementById('tema').value.trim() || 'Topic';
+  var user     = document.getElementById('user').value.trim() || 'Author';
+  var imagery  = document.getElementById('show-imagery').checked;
+  var useImg   = document.getElementById('use-image').checked;
+  var imgUrl   = document.getElementById('img-url').value.trim();
+  var imgPos   = document.getElementById('img-pos').value;
+  var imgSize  = document.getElementById('img-size').value;
+  var imgOvl   = parseFloat(document.getElementById('img-overlay').value);
+
+  genHtml = buildIntroHTML(selected, tema, user, imagery,
+            useImg && imgUrl ? imgUrl : '', imgPos, imgSize, imgOvl);
+
   document.getElementById('pframe').srcdoc = genHtml;
   document.getElementById('cout').textContent = genHtml;
   document.getElementById('out-wrap').style.display = 'block';
   switchOutTab('preview');
 }
 
-/* ─────────────────────────────────────────
-   copyGenCode — fixed: own copy logic,
-   no dependency on card/overlay objects
-───────────────────────────────────────── */
 function copyGenCode() {
-  if (!genHtml) {
-    showToast('Generate an intro first!', false);
-    return;
-  }
+  if (!genHtml) { showToast('Generate an intro first!', false); return; }
   var btn = document.getElementById('copy-gen-btn');
   copyToClipboard(genHtml, function() {
     btn.textContent = 'Copied!';
@@ -468,13 +597,94 @@ function copyGenCode() {
 }
 
 /* ═══════════════════════════════════════
-   BUILD EXPORTED INTRO HTML
+   BUILD EXPORTED HTML
+   imgUrl = '' means no image (canvas only)
 ═══════════════════════════════════════ */
-function buildIntroHTML(styleId, tema, user, imagery) {
+function buildIntroHTML(styleId, tema, user, imagery, imgUrl, imgPos, imgSize, imgOvl) {
   var cfg  = STYLE_CONFIGS[styleId] || STYLE_CONFIGS.cosmos;
   var anim = STYLE_ANIMS[styleId]   || STYLE_ANIMS.cosmos;
   var imgBlock = imagery ? '<div class="label">IMAGERY</div><div class="divider"></div>' : '';
-  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">\n<style>\n*{margin:0;padding:0;box-sizing:border-box}\nbody{background:'+cfg.bg+';width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:\'Segoe UI\',system-ui,sans-serif}\ncanvas{position:absolute;top:0;left:0;width:100%;height:100%}\n.stage{position:relative;z-index:10;text-align:center;width:90%;max-width:560px;animation:fadeIn 1.2s ease}\n.frame{position:relative;overflow:hidden;border:1px solid '+cfg.bc+';padding:clamp(28px,6vw,60px) clamp(22px,8vw,80px);background:'+cfg.overlay+';backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}\n.frame::after{content:"";position:absolute;top:0;left:-160%;width:55%;height:100%;background:linear-gradient(to right,transparent,'+cfg.shine+',transparent);transform:skewX(-22deg);animation:shine 4s 1.5s infinite ease-out}\n.corner{position:absolute;width:12px;height:12px;border-color:'+cfg.acc+';border-style:solid}\n.corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}.corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}\n.corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}.corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}\n.inner{position:relative;z-index:1}\n.label{letter-spacing:.55em;font-size:clamp(9px,1.5vw,11px);color:'+cfg.lc+';text-transform:uppercase;margin-bottom:clamp(10px,2.5vw,18px)}\n.divider{width:32px;height:1px;background:'+cfg.acc+';opacity:.4;margin:0 auto 14px}\n.theme{font-size:clamp(20px,5.5vw,42px);font-weight:200;color:'+cfg.tc+';text-transform:uppercase;letter-spacing:.15em;line-height:1.15}\n.sep{width:24px;height:1px;background:'+cfg.acc+';opacity:.3;margin:14px auto}\n.user{font-size:clamp(10px,1.8vw,14px);color:'+cfg.uc+';letter-spacing:.25em;text-transform:uppercase}\n@keyframes shine{0%{left:-160%}45%{left:160%}100%{left:160%}}\n@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}\n</style>\n</head>\n<body>\n<canvas id="cv"></canvas>\n<div class="stage">\n  <div class="frame">\n    <div class="corner tl"></div><div class="corner tr"></div>\n    <div class="corner bl"></div><div class="corner br"></div>\n    <div class="inner">\n      '+imgBlock+'\n      <div class="theme">'+tema+'</div>\n      <div class="sep"></div>\n      <div class="user">'+user+'</div>\n    </div>\n  </div>\n</div>\n<script>\nconst c=document.getElementById("cv"),x=c.getContext("2d");\nfunction rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();\nwindow.addEventListener("resize",rs);\n'+anim+'\n<\/script>\n</body>\n</html>';
+
+  /* background: canvas always present; image layered on top if provided */
+  var imgCSS = '';
+  var imgFallbackScript = '';
+  if (imgUrl) {
+    imgCSS = [
+      '.bg-img{',
+      '  position:absolute;top:0;left:0;width:100%;height:100%;',
+      '  background-image:url("' + imgUrl + '");',
+      '  background-size:' + imgSize + ';',
+      '  background-position:' + imgPos + ';',
+      '  background-repeat:no-repeat;',
+      '  z-index:2;',
+      '}',
+      '.bg-overlay{',
+      '  position:absolute;top:0;left:0;width:100%;height:100%;',
+      '  background:rgba(0,0,0,' + imgOvl + ');',
+      '  z-index:3;',
+      '}',
+    ].join('\n');
+
+    /* If image fails, hide the bg-img div so canvas shows through */
+    imgFallbackScript = [
+      'var bgImg = new Image();',
+      'bgImg.onerror = function(){',
+      '  var el = document.getElementById("bg-img");',
+      '  if(el) el.style.display="none";',
+      '};',
+      'bgImg.src = "' + imgUrl + '";',
+    ].join('\n');
+  }
+
+  var bgImgHTML = imgUrl
+    ? '<div class="bg-img" id="bg-img"></div><div class="bg-overlay"></div>'
+    : '';
+
+  return '<!DOCTYPE html>\n'
+    + '<html lang="en">\n<head>\n'
+    + '<meta charset="UTF-8">\n'
+    + '<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">\n'
+    + '<style>\n'
+    + '*{margin:0;padding:0;box-sizing:border-box}\n'
+    + 'body{background:' + cfg.bg + ';width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:\'Segoe UI\',system-ui,sans-serif}\n'
+    + 'canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}\n'
+    + imgCSS + '\n'
+    + '.stage{position:relative;z-index:10;text-align:center;width:90%;max-width:560px;animation:fadeIn 1.2s ease}\n'
+    + '.frame{position:relative;overflow:hidden;border:1px solid ' + cfg.bc + ';padding:clamp(28px,6vw,60px) clamp(22px,8vw,80px);background:' + cfg.overlay + ';backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}\n'
+    + '.frame::after{content:"";position:absolute;top:0;left:-160%;width:55%;height:100%;background:linear-gradient(to right,transparent,' + cfg.shine + ',transparent);transform:skewX(-22deg);animation:shine 4s 1.5s infinite ease-out}\n'
+    + '.corner{position:absolute;width:12px;height:12px;border-color:' + cfg.acc + ';border-style:solid}\n'
+    + '.corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}.corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}\n'
+    + '.corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}.corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}\n'
+    + '.inner{position:relative;z-index:1}\n'
+    + '.label{letter-spacing:.55em;font-size:clamp(9px,1.5vw,11px);color:' + cfg.lc + ';text-transform:uppercase;margin-bottom:clamp(10px,2.5vw,18px)}\n'
+    + '.divider{width:32px;height:1px;background:' + cfg.acc + ';opacity:.4;margin:0 auto 14px}\n'
+    + '.theme{font-size:clamp(20px,5.5vw,42px);font-weight:200;color:' + cfg.tc + ';text-transform:uppercase;letter-spacing:.15em;line-height:1.15}\n'
+    + '.sep{width:24px;height:1px;background:' + cfg.acc + ';opacity:.3;margin:14px auto}\n'
+    + '.user{font-size:clamp(10px,1.8vw,14px);color:' + cfg.uc + ';letter-spacing:.25em;text-transform:uppercase}\n'
+    + '@keyframes shine{0%{left:-160%}45%{left:160%}100%{left:160%}}\n'
+    + '@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}\n'
+    + '</style>\n</head>\n<body>\n'
+    + '<canvas id="cv"></canvas>\n'
+    + bgImgHTML + '\n'
+    + '<div class="stage">\n'
+    + '  <div class="frame">\n'
+    + '    <div class="corner tl"></div><div class="corner tr"></div>\n'
+    + '    <div class="corner bl"></div><div class="corner br"></div>\n'
+    + '    <div class="inner">\n'
+    + '      ' + imgBlock + '\n'
+    + '      <div class="theme">' + tema + '</div>\n'
+    + '      <div class="sep"></div>\n'
+    + '      <div class="user">' + user + '</div>\n'
+    + '    </div>\n'
+    + '  </div>\n'
+    + '</div>\n'
+    + '<script>\n'
+    + 'const c=document.getElementById("cv"),x=c.getContext("2d");\n'
+    + 'function rs(){c.width=window.innerWidth;c.height=window.innerHeight}rs();\n'
+    + 'window.addEventListener("resize",rs);\n'
+    + anim + '\n'
+    + imgFallbackScript + '\n'
+    + '<\/script>\n</body>\n</html>';
 }
 
 /* INIT */
