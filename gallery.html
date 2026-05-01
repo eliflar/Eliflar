@@ -215,7 +215,7 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
     </div>
     <div class="toggle-row">
       <input type="checkbox" id="show-imagery" checked />
-      <label for="show-imagery">Show IMAGERY label</label>
+      <label for="show-imagery">Show ELIFLAR label</label>
     </div>
 
     <!-- ══ IMAGE URL SECTION ══════════════════════════════ -->
@@ -602,7 +602,7 @@ function copyGenCode() {
 function buildIntroHTML(styleId, tema, user, imagery, imgUrl, imgPos, imgSize, imgOvl) {
   var cfg  = STYLE_CONFIGS[styleId] || STYLE_CONFIGS.cosmos;
   var anim = STYLE_ANIMS[styleId]   || STYLE_ANIMS.cosmos;
-  var imgBlock = imagery ? '<div class="label">IMAGERY</div><div class="divider"></div>' : '';
+  var imgBlock = imagery ? '<div class="label">ELIFLAR</div><div class="divider"></div>' : '';
 
   /* background: canvas always present; image layered on top if provided */
   var imgCSS = '';
