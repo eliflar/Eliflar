@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a2a3a;width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',system-ui,sans-serif}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+
+.stage{
+  position:relative;z-index:10;
+  text-align:center;
+  width:90%;max-width:580px;
+}
+
+.label{
+  font-size:11px;letter-spacing:.6em;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+  margin-bottom:16px;
+  animation:fadeDown .8s ease both .3s;
+}
+
+.frame{
+  position:relative;
+  padding:clamp(28px,5vw,52px) clamp(22px,7vw,72px);
+  background:rgba(10,18,28,0.45);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.15);
+  overflow:hidden;
+}
+
+/* shine sweep */
+.frame::after{
+  content:'';position:absolute;top:0;left:-160%;width:50%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,0.08),transparent);
+  transform:skewX(-20deg);
+  animation:shine 5s 1.5s infinite ease-out;
+}
+
+/* corner brackets */
+.c{position:absolute;width:14px;height:14px;border-color:rgba(255,255,255,0.6);border-style:solid}
+.c.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.c.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.c.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+.c.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+
+.inner{position:relative;z-index:1}
+
+.theme{
+  font-size:clamp(22px,5.5vw,44px);
+  font-weight:300;
+  color:#fff;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  line-height:1.15;
+  text-shadow:0 2px 20px rgba(0,0,0,0.5);
+  animation:zoomIn .9s cubic-bezier(.175,.885,.32,1.275) both .7s;
+}
+
+.sep{
+  width:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent);
+  margin:16px auto;
+  animation:growLine .5s ease forwards 1.4s;
+}
+
+.user{
+  font-size:clamp(10px,1.8vw,14px);
+  letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,0);
+  animation:fadeUser .7s ease forwards 1.6s;
+}
+
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-10px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+@keyframes zoomIn{
+  0%  {opacity:0;transform:scale(1.4);filter:blur(6px)}
+  60% {opacity:1;filter:blur(0)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes growLine{ to{width:80px} }
+@keyframes fadeUser{ to{color:rgba(255,255,255,0.65)} }
+@keyframes shine{
+  0%{left:-160%}45%{left:160%}100%{left:160%}
+}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<div class="stage">
+  <div class="label">IMAGERY</div>
+  <div class="frame">
+    <div class="c tl"></div><div class="c tr"></div>
+    <div class="c bl"></div><div class="c br"></div>
+    <div class="inner">
+      <div class="theme">[[MOJA_TEMA]]</div>
+      <div class="sep"></div>
+      <div class="user">[[USER_SHOW]]</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+
+function rs() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
+rs();
+window.addEventListener('resize', rs);
+
+/* ── Wave layer definitions ── */
+/* Each layer: color, base Y position (0-1), amplitude, freq, speed, opacity */
+const LAYERS = [
+  /* sky gradient — drawn separately */
+
+  /* back mountain ridges — cool blues */
+  { col:'#5b8fa8', y:.28, amp:.06, freq:.6,  spd:.12, op:1.0  },
+  { col:'#4a7a96', y:.32, amp:.05, freq:.7,  spd:.10, op:1.0  },
+  { col:'#7aafc2', y:.25, amp:.07, freq:.5,  spd:.08, op:0.85 },
+
+  /* mid teal/green hills */
+  { col:'#3d7a6e', y:.42, amp:.07, freq:.55, spd:.14, op:1.0  },
+  { col:'#2d6b5f', y:.46, amp:.06, freq:.65, spd:.11, op:1.0  },
+  { col:'#4d8c7a', y:.38, amp:.08, freq:.45, spd:.09, op:0.9  },
+
+  /* warm olive/yellow mid layer */
+  { col:'#c8a84b', y:.52, amp:.07, freq:.5,  spd:.13, op:1.0  },
+  { col:'#b8943a', y:.55, amp:.06, freq:.6,  spd:.10, op:1.0  },
+
+  /* deep teal valley */
+  { col:'#1a5c55', y:.60, amp:.08, freq:.5,  spd:.15, op:1.0  },
+  { col:'#145048', y:.64, amp:.07, freq:.55, spd:.12, op:1.0  },
+
+  /* orange/red foreground dunes */
+  { col:'#d4622a', y:.72, amp:.09, freq:.4,  spd:.16, op:1.0  },
+  { col:'#c85520', y:.76, amp:.08, freq:.45, spd:.13, op:1.0  },
+  { col:'#e07a3a', y:.68, amp:.10, freq:.38, spd:.11, op:0.9  },
+
+  /* cream/sand bottom edge */
+  { col:'#e8c878', y:.83, amp:.06, freq:.5,  spd:.14, op:1.0  },
+  { col:'#ddb858', y:.87, amp:.05, freq:.55, spd:.11, op:1.0  },
+];
+
+let t = 0;
+
+function drawWave(layer) {
+  const W = cv.width, H = cv.height;
+  const baseY = layer.y * H;
+  const amp   = layer.amp * H;
+
+  ctx.beginPath();
+  ctx.moveTo(0, H);
+
+  for (let x = 0; x <= W; x += 4) {
+    const nx = x / W;
+    const y  = baseY
+      + Math.sin(nx * Math.PI * 2 * layer.freq + t * layer.spd) * amp
+      + Math.sin(nx * Math.PI * 3 * layer.freq + t * layer.spd * 0.7) * amp * 0.4
+      + Math.sin(nx * Math.PI * 1.3 * layer.freq - t * layer.spd * 0.5) * amp * 0.25;
+    ctx.lineTo(x, y);
+  }
+
+  ctx.lineTo(W, H);
+  ctx.closePath();
+  ctx.globalAlpha = layer.op;
+  ctx.fillStyle = layer.col;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function drawSky() {
+  const W = cv.width, H = cv.height;
+  /* sky gradient from warm light grey-blue at top to mid blue */
+  const g = ctx.createLinearGradient(0, 0, 0, H * 0.35);
+  g.addColorStop(0,   '#d8dfe8');
+  g.addColorStop(0.4, '#b8ccd8');
+  g.addColorStop(1,   '#8aafc4');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+}
+
+/* subtle light reflection strip in the mid-valley (the "river") */
+function drawReflection() {
+  const W = cv.width, H = cv.height;
+  const ry = H * 0.54;
+  const rh = H * 0.04;
+  const g = ctx.createLinearGradient(0, ry, 0, ry + rh);
+  g.addColorStop(0,   'rgba(180,220,230,0.35)');
+  g.addColorStop(0.5, 'rgba(200,235,245,0.5)');
+  g.addColorStop(1,   'rgba(180,220,230,0.1)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, ry, W, rh);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  drawSky();
+  LAYERS.forEach(drawWave);
+  drawReflection();
+  t += 0.008;
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
