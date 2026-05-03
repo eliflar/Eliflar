@@ -827,7 +827,7 @@ function cGenerate() {
   var borderR = cShape==='circle' ? '50%' : '8px';
 
   /* background source: portrait URL or [[MOJA_SLIKA]] placeholder */
-  var bgSrcUrl = cBgSrc === 'portrait' ? imgUrl : 'First image link';
+  var bgSrcUrl = cBgSrc === 'portrait' ? imgUrl : '[[MOJA_SLIKA]]';
 
   var bgCSS='', bgHTML='', bgScript='';
   if(cBg==='blur'){
