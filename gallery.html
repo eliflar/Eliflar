@@ -102,6 +102,11 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
 #pframe { width:100%; height:290px; border:none; display:block; }
 #cpanel { display:none; background:#051417; max-height:290px; overflow:auto; padding:14px; }
 #cout { font-family:'Courier New',monospace; font-size:11px; color:rgba(240,230,210,.8); white-space:pre; }
+/* ── COMPOSER buttons ── */
+.cbtn { padding:7px 16px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer; border:1px solid var(--border); background:transparent; color:rgba(240,230,210,.5); transition:.15s; font-family:inherit; letter-spacing:.04em; }
+.cbtn:hover { border-color:var(--orange); color:var(--orange); }
+.cbtn.on { background:rgba(247,160,51,.15); border-color:var(--orange); color:var(--orange); }
+.cbtn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
 </style>
 </head>
 <body>
@@ -109,6 +114,7 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
 <div class="tab-bar">
   <button class="tab-btn active" id="tb-gallery"   onclick="switchTab('gallery')">Gallery</button>
   <button class="tab-btn"        id="tb-generator" onclick="switchTab('generator')">Generator</button>
+  <button class="tab-btn"        id="tb-composer"  onclick="switchTab('composer')">Composer</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -169,11 +175,6 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
       <div class="card-name">Landscape</div>
       <div class="card-sub">Abstract waves</div>
     </div>
-    <!-- ── INTRO 8 ── -->
-    <!-- <div class="card" data-file="intros/intro_portrait.html">
-      <div class="card-name">Portrait</div>
-      <div class="card-sub">Author photo + theme</div>
-    </div> -->
 
     <!-- ── ADD MORE INTROS BELOW ── -->
 
@@ -310,7 +311,7 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
    UI HELPERS
 ═══════════════════════════════════════ */
 function switchTab(t) {
-  ['gallery','generator'].forEach(function(id) {
+  ['gallery','generator','composer'].forEach(function(id) {
     document.getElementById('panel-'+id).classList.toggle('active', id===t);
     document.getElementById('tb-'+id).classList.toggle('active', id===t);
   });
@@ -448,7 +449,7 @@ function buildGallery() {
       else {
         fetch(file).then(function(r){ return r.text(); })
           .then(function(t){ doCopy(t, overlay); })
-          .catch(function(){ showToast('Could not read the file', false); });
+          .catch(function(){ /* file not found - thumbnail already shows loading */ });
       }
     });
 
@@ -679,6 +680,216 @@ function buildIntroHTML(styleId, tema, user, imagery, imgUrl, imgPos, imgSize, i
 
 /* INIT */
 buildGallery();
+</script>
+
+<!-- ═══════════════════════════════════════
+     TAB 3 — COMPOSER
+═══════════════════════════════════════ -->
+<div class="panel" id="panel-composer">
+  <div class="page-header">
+    <h2>Composer</h2>
+    <p>Build a portrait intro — choose photo, position &amp; style</p>
+  </div>
+
+  <!-- Content -->
+  <div class="gen-section">
+    <div class="sec-label">Content</div>
+    <div class="fields-row">
+      <div class="field">
+        <label>Theme <span style="opacity:.4;font-size:10px;">&#8594; [[MOJA_TEMA]]</span></label>
+        <input type="text" id="c-tema" value="My Topic" style="background:rgba(10,31,36,.9);border:1px solid var(--border);color:var(--cream);border-radius:6px;padding:9px 11px;font-size:13px;outline:none;width:100%;font-family:inherit" />
+      </div>
+      <div class="field">
+        <label>Author / Episode <span style="opacity:.4;font-size:10px;">&#8594; [[USER_SHOW]]</span></label>
+        <input type="text" id="c-user" value="Author &middot; Episode 01" style="background:rgba(10,31,36,.9);border:1px solid var(--border);color:var(--cream);border-radius:6px;padding:9px 11px;font-size:13px;outline:none;width:100%;font-family:inherit" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Portrait photo -->
+  <div class="gen-section">
+    <div class="sec-label">Portrait Photo URL</div>
+    <div style="position:relative;margin-bottom:8px">
+      <input type="text" id="c-img"
+        placeholder="https://raw.githubusercontent.com/..."
+        oninput="cPreview()"
+        style="background:rgba(10,31,36,.9);border:1px solid var(--border);color:var(--cream);border-radius:6px;padding:9px 36px 9px 11px;font-size:13px;outline:none;width:100%;font-family:inherit" />
+      <button onclick="document.getElementById('c-img').value='';cPreview()"
+        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(240,230,210,.4);cursor:pointer;font-size:16px">&#215;</button>
+    </div>
+    <div id="c-status" style="font-size:11px;min-height:16px;color:rgba(0,255,255,.6)"></div>
+    <div id="c-preview-wrap" style="display:none;margin-top:10px;align-items:center;gap:12px">
+      <div style="width:55px;height:55px;border-radius:50%;overflow:hidden;border:2px solid #ff6600;flex-shrink:0">
+        <img id="c-prev-img" src="" style="width:100%;height:100%;object-fit:cover;object-position:center top" onerror="document.getElementById('c-preview-wrap').style.display='none'">
+      </div>
+      <span style="font-size:11px;color:rgba(240,230,210,.5)">Preview ✓</span>
+    </div>
+  </div>
+
+  <!-- Options -->
+  <div class="gen-section">
+    <div class="sec-label">Portrait Position</div>
+    <div class="cbtn-row">
+      <button class="cbtn on" data-cpos="top"    onclick="cPick('pos',this)">&#8593; Top</button>
+      <button class="cbtn"    data-cpos="left"   onclick="cPick('pos',this)">&#8592; Left</button>
+      <button class="cbtn"    data-cpos="right"  onclick="cPick('pos',this)">&#8594; Right</button>
+      <button class="cbtn"    data-cpos="bottom" onclick="cPick('pos',this)">&#8595; Bottom</button>
+    </div>
+
+    <div class="sec-label">Portrait Shape</div>
+    <div class="cbtn-row">
+      <button class="cbtn on" data-cshape="circle" onclick="cPick('shape',this)">&#9679; Circle</button>
+      <button class="cbtn"    data-cshape="rect"   onclick="cPick('shape',this)">&#9632; Rectangle</button>
+    </div>
+
+    <div class="sec-label">Portrait Size</div>
+    <div class="cbtn-row">
+      <button class="cbtn"    data-csize="80px"  onclick="cPick('size',this)">Small</button>
+      <button class="cbtn on" data-csize="120px" onclick="cPick('size',this)">Medium</button>
+      <button class="cbtn"    data-csize="160px" onclick="cPick('size',this)">Large</button>
+    </div>
+
+    <div class="sec-label">Background Source</div>
+    <div class="cbtn-row">
+      <button class="cbtn on" data-cbgsrc="portrait"  onclick="cPick('bgsrc',this)">Same as portrait</button>
+      <button class="cbtn"    data-cbgsrc="moja_slika" onclick="cPick('bgsrc',this)">[[MOJA_SLIKA]]</button>
+    </div>
+
+    <div class="sec-label">Background Effect</div>
+    <div class="cbtn-row">
+      <button class="cbtn on" data-cbg="blur"   onclick="cPick('bg',this)">Blurred photo</button>
+      <button class="cbtn"    data-cbg="dark"   onclick="cPick('bg',this)">Dark solid</button>
+      <button class="cbtn"    data-cbg="cosmos" onclick="cPick('bg',this)">Cosmos stars</button>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="eliflar-btn" onclick="cGenerate()">&#9654; Compose Intro</button>
+    <button class="act-btn" id="c-copy-btn" onclick="cCopy()" style="padding:13px 18px;font-size:13px">Copy HTML</button>
+  </div>
+
+  <div class="out-wrap" id="c-out-wrap" style="display:none">
+    <div class="out-head">
+      <div class="out-tabs">
+        <button class="otab active" id="c-tab-p" onclick="cOut('preview')">Preview</button>
+        <button class="otab"        id="c-tab-c" onclick="cOut('code')">HTML Code</button>
+      </div>
+      <button class="act-btn" onclick="cCopy()">Copy HTML</button>
+    </div>
+    <iframe id="c-frame" style="width:100%;height:290px;border:none;display:block" title="composer"></iframe>
+    <div id="c-code-panel" style="display:none;background:#051417;max-height:290px;overflow:auto;padding:14px">
+      <pre id="c-code" style="font-family:'Courier New',monospace;font-size:11px;color:rgba(240,230,210,.8);white-space:pre"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── COMPOSER ── */
+var cPos='top', cShape='circle', cSize='120px', cBg='blur', cBgSrc='portrait', cHtml='';
+
+function cPick(group, el) {
+  var selectors = {'pos':'[data-cpos]','shape':'[data-cshape]','size':'[data-csize]','bg':'[data-cbg]','bgsrc':'[data-cbgsrc]'};
+  document.querySelectorAll(selectors[group]).forEach(function(b){ b.classList.remove('on'); });
+  el.classList.add('on');
+  if(group==='pos')   cPos    = el.getAttribute('data-cpos');
+  if(group==='shape') cShape  = el.getAttribute('data-cshape');
+  if(group==='size')  cSize   = el.getAttribute('data-csize');
+  if(group==='bg')    cBg     = el.getAttribute('data-cbg');
+  if(group==='bgsrc') cBgSrc  = el.getAttribute('data-cbgsrc');
+}
+
+function cPreview() {
+  var url  = document.getElementById('c-img').value.trim();
+  var wrap = document.getElementById('c-preview-wrap');
+  document.getElementById('c-status').textContent = url ? '\u2713 URL set' : '';
+  if (url) {
+    document.getElementById('c-prev-img').src = url;
+    wrap.style.display = 'flex';
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+function cOut(t) {
+  document.getElementById('c-tab-p').classList.toggle('active', t==='preview');
+  document.getElementById('c-tab-c').classList.toggle('active', t==='code');
+  document.getElementById('c-frame').style.display      = t==='preview' ? 'block' : 'none';
+  document.getElementById('c-code-panel').style.display = t==='code'    ? 'block' : 'none';
+}
+
+function cGenerate() {
+  var tema   = document.getElementById('c-tema').value.trim() || 'Topic';
+  var user   = document.getElementById('c-user').value.trim() || 'Author';
+  var imgUrl = document.getElementById('c-img').value.trim();
+
+  var flexDir = {top:'column',left:'row',right:'row-reverse',bottom:'column-reverse'}[cPos]||'column';
+  var margin  = {top:'margin-bottom:-18px',left:'margin-right:-18px',right:'margin-left:-18px',bottom:'margin-top:-18px'}[cPos]||'';
+  var borderR = cShape==='circle' ? '50%' : '8px';
+
+  /* background source: portrait URL or [[MOJA_SLIKA]] placeholder */
+  var bgSrcUrl = cBgSrc === 'portrait' ? imgUrl : 'First image link';
+
+  var bgCSS='', bgHTML='', bgScript='';
+  if(cBg==='blur'){
+    bgCSS  = '.bg{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;filter:brightness(0.28) blur(9px)}';
+    bgHTML = '<div class="bg"><img src="'+bgSrcUrl+'" alt=""></div>';
+  } else if(cBg==='dark'){
+    bgCSS = 'body{background:#0a0808}';
+  } else if(cBg==='cosmos'){
+    bgCSS   = '#bgcv{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}';
+    bgHTML  = '<canvas id="bgcv"></canvas>';
+    bgScript= 'var cv=document.getElementById("bgcv"),x=cv.getContext("2d");function rs(){cv.width=window.innerWidth;cv.height=window.innerHeight}rs();window.addEventListener("resize",rs);var S=Array.from({length:200},function(){return{px:Math.random(),py:Math.random(),r:Math.random()*1.2+.2,p:Math.random()*Math.PI*2,sp:Math.random()*.008+.003}});function df(){var g=x.createRadialGradient(cv.width*.4,cv.height*.5,0,cv.width*.4,cv.height*.5,cv.width*.8);g.addColorStop(0,"#030a18");g.addColorStop(1,"#010208");x.fillStyle=g;x.fillRect(0,0,cv.width,cv.height);S.forEach(function(s){s.p+=s.sp;x.beginPath();x.arc(s.px*cv.width,s.py*cv.height,s.r,0,Math.PI*2);x.fillStyle="rgba(180,210,255,"+(0.25+0.65*Math.abs(Math.sin(s.p)))+")";x.fill()});requestAnimationFrame(df)}df();';
+  }
+
+  var portraitHTML = imgUrl
+    ? '<div class="portrait" style="width:'+cSize+';height:'+cSize+';border-radius:'+borderR+';'+margin+'"><img src="'+imgUrl+'" alt=""></div>'
+    : '';
+
+  cHtml = '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n'
+    + '<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">\n'
+    + '<style>\n*{box-sizing:border-box;margin:0;padding:0}\n'
+    + 'body,html{width:100%;height:100%;background:#000;display:flex;justify-content:center;align-items:center;overflow:hidden;font-family:\'Segoe UI\',sans-serif}\n'
+    + bgCSS + '\n'
+    + '.stage{position:relative;z-index:10;display:flex;flex-direction:'+flexDir+';align-items:center;justify-content:center;animation:zoomIn 4s ease-in-out infinite}\n'
+    + '.portrait{overflow:hidden;background:#222;border:3px solid #ff6600;box-shadow:0 0 22px rgba(255,102,0,.75);flex-shrink:0}\n'
+    + '.portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}\n'
+    + '.frame{border:4px double #ff6600;padding:32px 44px;background:rgba(0,0,0,.8);box-shadow:0 0 30px rgba(255,102,0,.5);backdrop-filter:blur(10px);border-radius:4px;text-align:center;animation:glow 2s infinite alternate;min-width:180px}\n'
+    + '.lbl{letter-spacing:5px;font-size:11px;color:#ff6600;font-weight:900;margin-bottom:10px}\n'
+    + '.theme{font-size:clamp(20px,4.5vw,34px);font-weight:bold;color:#fff;text-transform:uppercase;letter-spacing:2px;margin:10px 0}\n'
+    + '.user{font-size:clamp(13px,2vw,17px);font-style:italic;color:#ffcc99}\n'
+    + '.tri{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-top:26px solid #ff6600;animation:bounce 1.5s infinite ease-in-out}\n'
+    + '@keyframes glow{from{box-shadow:0 0 20px rgba(255,102,0,.3);border-color:#ff6600}to{box-shadow:0 0 45px rgba(255,102,0,.7);border-color:#ff9933}}\n'
+    + '@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(12px)}}\n'
+    + '@keyframes zoomIn{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}\n'
+    + '</style>\n</head>\n<body>\n'
+    + bgHTML + '\n'
+    + '<div class="stage">\n'
+    + '  ' + portraitHTML + '\n'
+    + '  <div class="frame">\n'
+    + '    <div class="lbl">ELIFLAR</div>\n'
+    + '    <div class="theme">' + tema + '</div>\n'
+    + '    <div class="user">' + user + '</div>\n'
+    + '  </div>\n'
+    + '  <div class="tri"></div>\n'
+    + '</div>\n'
+    + (bgScript ? '<script>' + bgScript + '<\/script>\n' : '')
+    + '</body>\n</html>';
+
+  document.getElementById('c-frame').srcdoc = cHtml;
+  document.getElementById('c-code').textContent = cHtml;
+  document.getElementById('c-out-wrap').style.display = 'block';
+  cOut('preview');
+}
+
+function cCopy() {
+  if(!cHtml){ showToast('Compose an intro first!', false); return; }
+  copyToClipboard(cHtml, function(){
+    showToast('CODE COPIED \u2014 paste into Eliflar!');
+    var btn = document.getElementById('c-copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(function(){ btn.textContent = 'Copy HTML'; }, 2200);
+  }, function(){ showToast('Copy failed', false); });
+}
 </script>
 </body>
 </html>
