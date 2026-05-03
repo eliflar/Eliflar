@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        *{ box-sizing:border-box; margin:0; padding:0; }
+        body,html{
+            width:100%;height:100%;
+            background:#000;
+            display:flex;justify-content:center;align-items:center;
+            overflow:hidden;
+            font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+        }
+
+        /* ── BACKGROUND ── */
+        .bg{
+            position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+        }
+        .bg img{
+            width:100%;height:100%;object-fit:cover;
+            filter:brightness(0.25) blur(12px);
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .stage{
+            position:relative;z-index:10;
+            width:min(720px,92vw);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            animation: zoomIn 4s ease-in-out infinite;
+        }
+
+        /* ── PORTRAIT PHOTO ── */
+        .portrait{
+            flex-shrink:0;
+            z-index:12;
+            overflow:hidden;
+            background:#222;
+            border:3px solid #ff6600;
+            box-shadow:0 0 25px rgba(255,102,0,.6);
+            transition: all 0.4s ease;
+        }
+        .portrait img{
+            width:100%;height:100%;object-fit:cover;
+            display:block;
+        }
+
+        .portrait.circle{ border-radius:50%; }
+        .portrait.rect  { border-radius:12px; }
+
+        /* ── TEXT FRAME ── */
+        .rect-frame{
+            border:4px double #ff6600;
+            background:rgba(0,0,0,.85);
+            box-shadow:0 0 35px rgba(255,102,0,.4);
+            backdrop-filter:blur(12px);
+            border-radius:4px;
+            padding:40px 50px;
+            text-align:center;
+            animation:glow 2s infinite alternate;
+            flex:1;
+            min-width:0;
+        }
+
+        .eliflar-label{
+            letter-spacing:6px;font-size:12px;
+            color:#ff6600;font-weight:900;
+            margin-bottom:12px;
+        }
+        .theme{
+            font-size:clamp(22px,5vw,38px);
+            font-weight:bold;color:#fff;
+            text-transform:uppercase;letter-spacing:2px;
+            margin:14px 0;
+            line-height: 1.2;
+        }
+        .user{
+            font-size:clamp(14px,2.2vw,18px);
+            font-style:italic;color:#ffcc99;
+        }
+
+        /* ── TRIANGLE ── */
+        .tri{
+            position:absolute;bottom:-45px;left:50%;transform:translateX(-50%);
+            width:0;height:0;
+            border-left:20px solid transparent;
+            border-right:20px solid transparent;
+            border-top:28px solid #ff6600;
+            animation:bounce 1.5s infinite ease-in-out;
+        }
+
+        /* ── POSITIONS ── */
+        .stage.pos-top{ flex-direction:column; }
+        .stage.pos-top .portrait{ width:130px; height:130px; margin-bottom:-25px; }
+
+        .stage.pos-left{ flex-direction:row; }
+        .stage.pos-left .portrait{ width:120px; height:120px; margin-right:-20px; }
+
+        .stage.pos-right{ flex-direction:row-reverse; }
+        .stage.pos-right .portrait{ width:120px; height:120px; margin-left:-20px; }
+
+        .stage.pos-bottom{ flex-direction:column-reverse; }
+        .stage.pos-bottom .portrait{ width:130px; height:130px; margin-top:-25px; }
+
+        /* ── SELECTOR UI ── */
+        #selector{
+            position:fixed;top:15px;left:50%;transform:translateX(-50%);
+            z-index:100; display:flex;gap:8px;
+            padding:10px 15px; background:rgba(0,0,0,.7);
+            border:1px solid rgba(255,102,0,.4); border-radius:40px;
+            backdrop-filter:blur(10px);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        .sbtn{
+            padding:6px 14px;font-size:10px;font-weight:800;
+            text-transform:uppercase; border:1px solid rgba(255,102,0,.3);
+            border-radius:20px;cursor:pointer; background:transparent;
+            color:rgba(255,204,153,.7); transition:.2s;
+        }
+        .sbtn.on{ background:#ff6600; border-color:#ff6600; color:#fff; }
+
+        @keyframes glow{
+            from{box-shadow:0 0 20px rgba(255,102,0,.2);border-color:#ff6600}
+            to  {box-shadow:0 0 45px rgba(255,102,0,.6);border-color:#ff9933}
+        }
+        @keyframes bounce{
+            0%,100%{transform:translateX(-50%) translateY(0)}
+            50%    {transform:translateX(-50%) translateY(15px)}
+        }
+        @keyframes zoomIn{
+            0%,100%{transform:scale(1)}
+            50%    {transform:scale(1.04)}
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg">
+    <img id="bg-img" src="[[MOJA_SLIKA]]" onerror="this.style.display='none'">
+</div>
+
+<div id="selector">
+    <button class="sbtn on" onclick="setPos('top', event)">Top</button>
+    <button class="sbtn" onclick="setPos('left', event)">Left</button>
+    <button class="sbtn" onclick="setPos('right', event)">Right</button>
+    <button class="sbtn" onclick="setPos('bottom', event)">Bottom</button>
+    <button class="sbtn on" style="margin-left:10px" onclick="setShape('circle', event)">Circle</button>
+    <button class="sbtn" onclick="setShape('rect', event)">Square</button>
+</div>
+
+<div class="stage pos-top" id="stage">
+    <div class="portrait circle" id="portrait">
+        <img id="portrait-img" src="[[MOJA_SLIKA]]" alt="User" onerror="setDefaultAvatar(this)">
+    </div>
+
+    <div class="rect-frame">
+        <div class="eliflar-label">Eliflar</div>
+        <div class="theme">[[MOJA_TEMA]]</div>
+        <div class="user">[[USER_SHOW]]</div>
+    </div>
+
+    <div class="tri"></div>
+</div>
+
+<script>
+var hideTimer;
+var selector = document.getElementById('selector');
+
+function resetHide(){
+    clearTimeout(hideTimer);
+    selector.style.opacity = '1';
+    hideTimer = setTimeout(function(){
+        selector.style.opacity = '0';
+    }, 3000);
+}
+
+// Се активира на доближување со глувче или допир
+selector.addEventListener('mouseenter', function(){ 
+    clearTimeout(hideTimer); 
+    selector.style.opacity = '1'; 
+});
+selector.addEventListener('mouseleave', resetHide);
+document.addEventListener('mousemove', function(e){
+    // Ако глувчето е во горните 80 пиксели од екранот, појави го менито
+    if(e.clientY < 80) {
+        selector.style.opacity = '1';
+        resetHide();
+    }
+});
+document.addEventListener('touchstart', function(){ 
+    selector.style.opacity = '1'; 
+    resetHide(); 
+});
+
+function setDefaultAvatar(imgElement) {
+    var userName = "[[USER_SHOW]]";
+    if(userName.indexOf('USER_SHOW') > -1 || userName === "") userName = "User";
+    imgElement.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(userName) + "&background=ff6600&color=fff&size=256&bold=true";
+    document.getElementById('bg-img').style.opacity = '0.3';
+}
+
+function setPos(pos, event){
+    var stage = document.getElementById('stage');
+    ['pos-top','pos-left','pos-right','pos-bottom'].forEach(c => stage.classList.remove(c));
+    stage.classList.add('pos-'+pos);
+    
+    // Поправена селекција на копчиња
+    var btns = event.currentTarget.parentNode.querySelectorAll('.sbtn');
+    btns.forEach(b => {
+        if(['Top','Left','Right','Bottom'].includes(b.textContent)) b.classList.remove('on');
+    });
+    event.currentTarget.classList.add('on');
+    resetHide();
+}
+
+function setShape(shape, event){
+    var p = document.getElementById('portrait');
+    p.classList.remove('circle','rect');
+    p.classList.add(shape === 'circle' ? 'circle' : 'rect');
+    
+    var btns = event.currentTarget.parentNode.querySelectorAll('.sbtn');
+    btns.forEach(b => {
+        if(['Circle','Square'].includes(b.textContent)) b.classList.remove('on');
+    });
+    event.currentTarget.classList.add('on');
+    resetHide();
+}
+
+window.onload = function() {
+    var img = document.getElementById('portrait-img');
+    if(img.src.indexOf('MOJA_SLIKA') > -1 || img.src === "" || window.location.href.includes('MOJA_SLIKA')) {
+        setDefaultAvatar(img);
+    }
+    resetHide(); // Исчезнува по 3 секунди на почеток
+};
+</script>
+</body>
+</html>
