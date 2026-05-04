@@ -1,242 +1,165 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <style>
-        *{ box-sizing:border-box; margin:0; padding:0; }
-        body,html{
-            width:100%;height:100%;
-            background:#000;
-            display:flex;justify-content:center;align-items:center;
-            overflow:hidden;
-            font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body,html{
+  width:100%;height:100%;background:#000;
+  display:flex;justify-content:center;align-items:center;
+  overflow:hidden;
+  font-family:'Segoe UI',Arial,sans-serif;
+}
 
-        /* ── BACKGROUND ── */
-        .bg{
-            position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;
-            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
-        }
-        .bg img{
-            width:100%;height:100%;object-fit:cover;
-            filter:brightness(0.25) blur(12px);
-        }
+/* background */
+.bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover;filter:brightness(0.25) blur(8px)}
 
-        /* ── MAIN LAYOUT ── */
-        .stage{
-            position:relative;z-index:10;
-            width:min(720px,92vw);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            animation: zoomIn 4s ease-in-out infinite;
-        }
+/* stage */
+.stage{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center}
 
-        /* ── PORTRAIT PHOTO ── */
-        .portrait{
-            flex-shrink:0;
-            z-index:12;
-            overflow:hidden;
-            background:#222;
-            border:3px solid #ff6600;
-            box-shadow:0 0 25px rgba(255,102,0,.6);
-            transition: all 0.4s ease;
-        }
-        .portrait img{
-            width:100%;height:100%;object-fit:cover;
-            display:block;
-        }
+/* portrait */
+.portrait{
+  flex-shrink:0;overflow:hidden;background:#222;
+  border:3px solid #ff6600;
+  box-shadow:0 0 20px rgba(255,102,0,.6);
+  width:120px;height:120px;
+  margin-bottom:-22px;
+  border-radius:50%;
+}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
 
-        .portrait.circle{ border-radius:50%; }
-        .portrait.rect  { border-radius:12px; }
+/* frame */
+.frame{
+  border:3px solid #ff6600;
+  background:rgba(0,0,0,.85);
+  border-radius:4px;
+  padding:40px 50px 30px 50px;
+  text-align:center;
+}
+.lbl{letter-spacing:5px;font-size:11px;color:#ff6600;font-weight:900;margin-bottom:10px}
+.theme{font-size:30px;font-weight:bold;color:#fff;text-transform:uppercase;letter-spacing:2px;margin:12px 0;line-height:1.2}
+.user{font-size:15px;font-style:italic;color:#ffcc99}
 
-        /* ── TEXT FRAME ── */
-        .rect-frame{
-            border:4px double #ff6600;
-            background:rgba(0,0,0,.85);
-            box-shadow:0 0 35px rgba(255,102,0,.4);
-            backdrop-filter:blur(12px);
-            border-radius:4px;
-            padding:40px 50px;
-            text-align:center;
-            animation:glow 2s infinite alternate;
-            flex:1;
-            min-width:0;
-        }
+/* triangle */
+.tri{
+  width:0;height:0;
+  border-left:18px solid transparent;
+  border-right:18px solid transparent;
+  border-top:24px solid #ff6600;
+  margin-top:20px;
+}
 
-        .eliflar-label{
-            letter-spacing:6px;font-size:12px;
-            color:#ff6600;font-weight:900;
-            margin-bottom:12px;
-        }
-        .theme{
-            font-size:clamp(22px,5vw,38px);
-            font-weight:bold;color:#fff;
-            text-transform:uppercase;letter-spacing:2px;
-            margin:14px 0;
-            line-height: 1.2;
-        }
-        .user{
-            font-size:clamp(14px,2.2vw,18px);
-            font-style:italic;color:#ffcc99;
-        }
-
-        /* ── TRIANGLE ── */
-        .tri{
-            position:absolute;bottom:-45px;left:50%;transform:translateX(-50%);
-            width:0;height:0;
-            border-left:20px solid transparent;
-            border-right:20px solid transparent;
-            border-top:28px solid #ff6600;
-            animation:bounce 1.5s infinite ease-in-out;
-        }
-
-        /* ── POSITIONS ── */
-        .stage.pos-top{ flex-direction:column; }
-        .stage.pos-top .portrait{ width:130px; height:130px; margin-bottom:-25px; }
-
-        .stage.pos-left{ flex-direction:row; }
-        .stage.pos-left .portrait{ width:120px; height:120px; margin-right:-20px; }
-
-        .stage.pos-right{ flex-direction:row-reverse; }
-        .stage.pos-right .portrait{ width:120px; height:120px; margin-left:-20px; }
-
-        .stage.pos-bottom{ flex-direction:column-reverse; }
-        .stage.pos-bottom .portrait{ width:130px; height:130px; margin-top:-25px; }
-
-        /* ── SELECTOR UI ── */
-        #selector{
-            position:fixed;top:15px;left:50%;transform:translateX(-50%);
-            z-index:100; display:flex;gap:8px;
-            padding:10px 15px; background:rgba(0,0,0,.7);
-            border:1px solid rgba(255,102,0,.4); border-radius:40px;
-            backdrop-filter:blur(10px);
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-        .sbtn{
-            padding:6px 14px;font-size:10px;font-weight:800;
-            text-transform:uppercase; border:1px solid rgba(255,102,0,.3);
-            border-radius:20px;cursor:pointer; background:transparent;
-            color:rgba(255,204,153,.7); transition:.2s;
-        }
-        .sbtn.on{ background:#ff6600; border-color:#ff6600; color:#fff; }
-
-        @keyframes glow{
-            from{box-shadow:0 0 20px rgba(255,102,0,.2);border-color:#ff6600}
-            to  {box-shadow:0 0 45px rgba(255,102,0,.6);border-color:#ff9933}
-        }
-        @keyframes bounce{
-            0%,100%{transform:translateX(-50%) translateY(0)}
-            50%    {transform:translateX(-50%) translateY(15px)}
-        }
-        @keyframes zoomIn{
-            0%,100%{transform:scale(1)}
-            50%    {transform:scale(1.04)}
-        }
-    </style>
+/* selector */
+#sel{
+  position:fixed;top:12px;left:0;right:0;
+  text-align:center;z-index:100;
+}
+.srow{display:inline-block;background:rgba(0,0,0,.75);border:1px solid rgba(255,102,0,.4);border-radius:30px;padding:7px 12px}
+.sbtn{
+  padding:5px 12px;font-size:10px;font-weight:800;
+  text-transform:uppercase;border:1px solid rgba(255,102,0,.3);
+  border-radius:16px;cursor:pointer;background:transparent;
+  color:rgba(255,204,153,.7);margin:0 2px;
+}
+.sbtn.on{background:#ff6600;border-color:#ff6600;color:#fff}
+</style>
 </head>
 <body>
 
 <div class="bg">
-    <img id="bg-img" src="[[MOJA_SLIKA]]" onerror="this.style.display='none'">
+  <img id="bg-img" src="[[MOJA_SLIKA]]" onerror="this.style.display='none'">
 </div>
 
-<div id="selector">
-    <button class="sbtn on" onclick="setPos('top', event)">Top</button>
-    <button class="sbtn" onclick="setPos('left', event)">Left</button>
-    <button class="sbtn" onclick="setPos('right', event)">Right</button>
-    <button class="sbtn" onclick="setPos('bottom', event)">Bottom</button>
-    <button class="sbtn on" style="margin-left:10px" onclick="setShape('circle', event)">Circle</button>
-    <button class="sbtn" onclick="setShape('rect', event)">Square</button>
+<div id="sel">
+  <div class="srow">
+    <button class="sbtn on" id="b-top"    onclick="setPos('top')">Top</button>
+    <button class="sbtn"    id="b-left"   onclick="setPos('left')">Left</button>
+    <button class="sbtn"    id="b-right"  onclick="setPos('right')">Right</button>
+    <button class="sbtn"    id="b-bottom" onclick="setPos('bottom')">Bottom</button>
+    &nbsp;
+    <button class="sbtn on" id="b-circle" onclick="setShape('circle')">Circle</button>
+    <button class="sbtn"    id="b-rect"   onclick="setShape('rect')">Square</button>
+  </div>
 </div>
 
-<div class="stage pos-top" id="stage">
-    <div class="portrait circle" id="portrait">
-        <img id="portrait-img" src="[[MOJA_SLIKA]]" alt="User" onerror="setDefaultAvatar(this)">
-    </div>
-
-    <div class="rect-frame">
-        <div class="eliflar-label">Eliflar</div>
-        <div class="theme">[[MOJA_TEMA]]</div>
-        <div class="user">[[USER_SHOW]]</div>
-    </div>
-
-    <div class="tri"></div>
+<div class="stage" id="stage">
+  <div class="portrait" id="portrait">
+    <img id="portrait-img" src="[[MOJA_SLIKA]]" onerror="this.src='https://ui-avatars.com/api/?name=User&background=ff6600&color=fff&size=256&bold=true'">
+  </div>
+  <div class="frame">
+    <div class="lbl">ELIFLAR</div>
+    <div class="theme">[[MOJA_TEMA]]</div>
+    <div class="user">[[USER_SHOW]]</div>
+  </div>
+  <div class="tri"></div>
 </div>
 
 <script>
+var curPos='top', curShape='circle';
+var sel=document.getElementById('sel');
 var hideTimer;
-var selector = document.getElementById('selector');
 
 function resetHide(){
-    clearTimeout(hideTimer);
-    selector.style.opacity = '1';
-    hideTimer = setTimeout(function(){
-        selector.style.opacity = '0';
-    }, 3000);
+  clearTimeout(hideTimer);
+  sel.style.opacity='1';
+  hideTimer=setTimeout(function(){sel.style.opacity='0';},3000);
 }
 
-// Се активира на доближување со глувче или допир
-selector.addEventListener('mouseenter', function(){ 
-    clearTimeout(hideTimer); 
-    selector.style.opacity = '1'; 
-});
-selector.addEventListener('mouseleave', resetHide);
-document.addEventListener('mousemove', function(e){
-    // Ако глувчето е во горните 80 пиксели од екранот, појави го менито
-    if(e.clientY < 80) {
-        selector.style.opacity = '1';
-        resetHide();
-    }
-});
-document.addEventListener('touchstart', function(){ 
-    selector.style.opacity = '1'; 
-    resetHide(); 
-});
+sel.onclick=function(){resetHide();};
+document.addEventListener('touchstart',function(){sel.style.opacity='1';resetHide();});
+document.addEventListener('mousemove',function(e){if(e.clientY<80){sel.style.opacity='1';resetHide();}});
+resetHide();
 
-function setDefaultAvatar(imgElement) {
-    var userName = "[[USER_SHOW]]";
-    if(userName.indexOf('USER_SHOW') > -1 || userName === "") userName = "User";
-    imgElement.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(userName) + "&background=ff6600&color=fff&size=256&bold=true";
-    document.getElementById('bg-img').style.opacity = '0.3';
+function setPos(pos){
+  curPos=pos;
+  var stage=document.getElementById('stage');
+  var p=document.getElementById('portrait');
+
+  /* reset */
+  stage.style.flexDirection='column';
+  p.style.width='120px';p.style.height='120px';
+  p.style.marginBottom='0';p.style.marginTop='0';
+  p.style.marginLeft='0';p.style.marginRight='0';
+
+  if(pos==='top'){
+    stage.style.flexDirection='column';
+    p.style.marginBottom='-22px';
+  } else if(pos==='left'){
+    stage.style.flexDirection='row';
+    p.style.marginRight='-18px';
+  } else if(pos==='right'){
+    stage.style.flexDirection='row-reverse';
+    p.style.marginLeft='-18px';
+  } else if(pos==='bottom'){
+    stage.style.flexDirection='column-reverse';
+    p.style.marginTop='-22px';
+  }
+
+  /* buttons */
+  var ids=['top','left','right','bottom'];
+  for(var i=0;i<ids.length;i++){
+    var b=document.getElementById('b-'+ids[i]);
+    if(b) b.className=b.className.replace(' on','');
+    if(ids[i]===pos && b) b.className+=' on';
+  }
+  resetHide();
 }
 
-function setPos(pos, event){
-    var stage = document.getElementById('stage');
-    ['pos-top','pos-left','pos-right','pos-bottom'].forEach(c => stage.classList.remove(c));
-    stage.classList.add('pos-'+pos);
-    
-    // Поправена селекција на копчиња
-    var btns = event.currentTarget.parentNode.querySelectorAll('.sbtn');
-    btns.forEach(b => {
-        if(['Top','Left','Right','Bottom'].includes(b.textContent)) b.classList.remove('on');
-    });
-    event.currentTarget.classList.add('on');
-    resetHide();
-}
+function setShape(shape){
+  curShape=shape;
+  var p=document.getElementById('portrait');
+  p.style.borderRadius=shape==='circle'?'50%':'10px';
 
-function setShape(shape, event){
-    var p = document.getElementById('portrait');
-    p.classList.remove('circle','rect');
-    p.classList.add(shape === 'circle' ? 'circle' : 'rect');
-    
-    var btns = event.currentTarget.parentNode.querySelectorAll('.sbtn');
-    btns.forEach(b => {
-        if(['Circle','Square'].includes(b.textContent)) b.classList.remove('on');
-    });
-    event.currentTarget.classList.add('on');
-    resetHide();
+  var bc=document.getElementById('b-circle');
+  var br=document.getElementById('b-rect');
+  if(bc) bc.className=bc.className.replace(' on','');
+  if(br) br.className=br.className.replace(' on','');
+  if(shape==='circle'&&bc) bc.className+=' on';
+  if(shape==='rect'&&br)   br.className+=' on';
+  resetHide();
 }
-
-window.onload = function() {
-    var img = document.getElementById('portrait-img');
-    if(img.src.indexOf('MOJA_SLIKA') > -1 || img.src === "" || window.location.href.includes('MOJA_SLIKA')) {
-        setDefaultAvatar(img);
-    }
-    resetHide(); // Исчезнува по 3 секунди на почеток
-};
 </script>
 </body>
 </html>
