@@ -102,6 +102,10 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
 #pframe { width:100%; height:290px; border:none; display:block; }
 #cpanel { display:none; background:#051417; max-height:290px; overflow:auto; padding:14px; }
 #cout { font-family:'Courier New',monospace; font-size:11px; color:rgba(240,230,210,.8); white-space:pre; }
+.cbtn { padding:7px 16px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer; border:1px solid var(--border); background:transparent; color:rgba(240,230,210,.5); transition:.15s; font-family:inherit; letter-spacing:.04em; }
+.cbtn:hover { border-color:var(--orange); color:var(--orange); }
+.cbtn.on { background:rgba(247,160,51,.15); border-color:var(--orange); color:var(--orange); }
+.cbtn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
 /* ── COMPOSER buttons ── */
 .cbtn { padding:7px 16px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer; border:1px solid var(--border); background:transparent; color:rgba(240,230,210,.5); transition:.15s; font-family:inherit; letter-spacing:.04em; }
 .cbtn:hover { border-color:var(--orange); color:var(--orange); }
@@ -291,6 +295,44 @@ body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--crea
     <div class="sec-label">Visual Style <span style="font-size:10px;opacity:.5;font-weight:400;">(used as fallback if image is set)</span></div>
     <div class="style-grid" id="style-grid"></div>
   </div>
+
+  <!-- TICKER SECTION -->
+  <div class="gen-section">
+    <div class="sec-label">Running Text <span style="font-size:10px;opacity:.5;font-weight:400;">optional</span></div>
+    <div class="fields-row">
+      <div class="field">
+        <label>Message</label>
+        <input type="text" id="ticker-text" placeholder="Your scrolling message..." />
+      </div>
+    </div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+      <div>
+        <div class="sec-label" style="margin-bottom:8px">Color</div>
+        <div style="display:flex;gap:6px">
+          <button class="pill active" id="tc-w" onclick="setTC('#ffffff',this)">White</button>
+          <button class="pill"        id="tc-y" onclick="setTC('#ffee50',this)">Yellow</button>
+          <button class="pill"        id="tc-c" onclick="setTC('#00ffff',this)">Cyan</button>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label" style="margin-bottom:8px">Position</div>
+        <div style="display:flex;gap:6px">
+          <button class="pill active" id="tp-top" onclick="setTP('top',this)">Top</button>
+          <button class="pill"        id="tp-bot" onclick="setTP('bottom',this)">Bottom</button>
+        </div>
+      </div>
+      <div>
+        <div class="sec-label" style="margin-bottom:8px">Repeat</div>
+        <div style="display:flex;gap:6px">
+          <button class="pill active" id="tr-inf" onclick="setTR(-1,this)">Loop</button>
+          <button class="pill"        id="tr-2"   onclick="setTR(2,this)">2×</button>
+          <button class="pill"        id="tr-3"   onclick="setTR(3,this)">3×</button>
+          <button class="pill"        id="tr-5"   onclick="setTR(5,this)">5×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END TICKER SECTION -->
 
   <div class="btn-row">
     <button class="eliflar-btn" onclick="generate()">Generate Intro</button>
@@ -532,6 +574,10 @@ var THUMB_RENDERERS = {
    STYLE PICKER
 ═══════════════════════════════════════ */
 var selected = 'cosmos', genHtml = '';
+var tColor='#ffffff', tPos='top', tRep=-1;
+function setTC(col,btn){ tColor=col; document.querySelectorAll('#tc-w,#tc-y,#tc-c').forEach(function(b){b.classList.remove('active')}); btn.classList.add('active'); }
+function setTP(pos,btn){ tPos=pos;   document.querySelectorAll('#tp-top,#tp-bot').forEach(function(b){b.classList.remove('active')}); btn.classList.add('active'); }
+function setTR(n,btn)  { tRep=n;    document.querySelectorAll('#tr-inf,#tr-2,#tr-3,#tr-5').forEach(function(b){b.classList.remove('active')}); btn.classList.add('active'); }
 
 (function buildStylePicker() {
   var grid = document.getElementById('style-grid');
@@ -572,8 +618,10 @@ function generate() {
   var imgSize  = document.getElementById('img-size').value;
   var imgOvl   = parseFloat(document.getElementById('img-overlay').value);
 
+  var tickerTxt = document.getElementById('ticker-text').value.trim();
   genHtml = buildIntroHTML(selected, tema, user, imagery,
-            useImg && imgUrl ? imgUrl : '', imgPos, imgSize, imgOvl);
+            useImg && imgUrl ? imgUrl : '', imgPos, imgSize, imgOvl,
+            tickerTxt, tColor, tPos, tRep);
 
   document.getElementById('pframe').srcdoc = genHtml;
   document.getElementById('cout').textContent = genHtml;
@@ -597,7 +645,7 @@ function copyGenCode() {
    BUILD EXPORTED HTML
    imgUrl = '' means no image (canvas only)
 ═══════════════════════════════════════ */
-function buildIntroHTML(styleId, tema, user, imagery, imgUrl, imgPos, imgSize, imgOvl) {
+function buildIntroHTML(styleId, tema, user, imagery, imgUrl, imgPos, imgSize, imgOvl, tickerTxt, tickerCol, tickerPos, tickerRep) {
   var cfg  = STYLE_CONFIGS[styleId] || STYLE_CONFIGS.cosmos;
   var anim = STYLE_ANIMS[styleId]   || STYLE_ANIMS.cosmos;
   var imgBlock = imagery ? '<div class="label">ELIFLAR</div><div class="divider"></div>' : '';
@@ -681,7 +729,61 @@ function buildIntroHTML(styleId, tema, user, imagery, imgUrl, imgPos, imgSize, i
     + 'window.addEventListener("resize",rs);\n'
     + anim + '\n'
     + imgFallbackScript + '\n'
-    + '<\/script>\n</body>\n</html>';
+    + '<\/script>\n'
+    + (tickerTxt ? buildTickerDiv(tickerTxt,tickerCol,tickerPos,tickerRep) : '')
+    + '</body>\n</html>';
+}
+
+/* ── TICKER DIV BUILDER ── */
+function buildTickerDiv(txt, col, pos, rep) {
+  if (!txt) return '';
+  var topVal = pos === 'top' ? '6px' : 'auto';
+  var botVal = pos === 'bottom' ? '6px' : 'auto';
+
+  /* WEBFILE mode: fetch text from URL at runtime inside generated HTML */
+  if (txt.indexOf('__WEBFILE__') === 0) {
+    var url = txt.replace('__WEBFILE__','');
+    return '<div id="tk-wrap" style="overflow:hidden;position:fixed;top:'+topVal+';bottom:'+botVal
+      +';left:0;right:0;height:36px;z-index:50;display:flex;align-items:center'
+      +';background:rgba(0,0,0,0.5);pointer-events:none">'
+      + '<style>.tki{display:inline-block;white-space:nowrap;padding-left:100%'
+      + ';font-size:15px;font-weight:700;letter-spacing:.06em'
+      + ';color:'+col+';text-shadow:0 0 10px '+col
+      + ';animation:tkM 20s linear infinite}'
+      + '@keyframes tkM{to{transform:translateX(-100%)}}</style>'
+      + '<span class="tki" id="tk-span">Loading...</span></div>\n'
+      + '<script>'
+      + 'fetch("'+url+'")'
+      + '.then(function(r){return r.text()})'
+      + '.then(function(t){'
+      +   'var s=document.getElementById("tk-span");'
+      +   'if(!s)return;'
+      +   'var txt=t.trim().replace(/\\s+/g," ");'
+      +   'var rep="";for(var i=0;i<5;i++)rep+=txt+"   \u2022   ";'
+      +   's.textContent=rep;'
+      +   'var dur=Math.max(10,txt.length*0.3);'
+      +   's.style.animationDuration=dur+"s";'
+      + '})'
+      + '.catch(function(){document.getElementById("tk-wrap").style.display="none"});'
+      + '<\/script>\n';
+  }
+
+  /* Static text mode */
+  var dur    = Math.max(10, txt.length * 0.3).toFixed(1);
+  var iter   = (rep === -1) ? 'infinite' : String(rep);
+  var numRep = (rep === -1) ? 5 : rep;
+  var sep    = '\u00a0\u00a0\u00a0\u2022\u00a0\u00a0\u00a0';
+  var txt2   = '';
+  for (var i = 0; i < numRep; i++) txt2 += txt + sep;
+  return '<div style="overflow:hidden;position:fixed;top:'+topVal+';bottom:'+botVal
+    +';left:0;right:0;height:36px;z-index:50;display:flex;align-items:center'
+    +';background:rgba(0,0,0,0.5);pointer-events:none">'
+    + '<style>.tki{display:inline-block;white-space:nowrap;padding-left:100%'
+    + ';font-size:15px;font-weight:700;letter-spacing:.06em'
+    + ';color:'+col+';text-shadow:0 0 10px '+col
+    + ';animation:tkM '+dur+'s linear '+iter+'}'
+    + '@keyframes tkM{to{transform:translateX(-100%)}}</style>'
+    + '<span class="tki">'+txt2+'</span></div>\n';
 }
 
 /* INIT */
@@ -769,6 +871,33 @@ buildGallery();
     </div>
   </div>
 
+  <!-- LIVE DATA TICKER -->
+  <div class="gen-section">
+    <div class="sec-label">Live Data Ticker <span style="font-size:10px;opacity:.5;font-weight:400;">optional — fetches real data</span></div>
+    <div class="cbtn-row">
+      <button class="cbtn on" data-csrc="none"   onclick="cPickSrc(this)">None</button>
+      <button class="cbtn"    data-csrc="quake"  onclick="cPickSrc(this)">&#127758; Earthquakes</button>
+      <button class="cbtn"    data-csrc="iss"    onclick="cPickSrc(this)">&#128640; ISS Position</button>
+      <button class="cbtn"    data-csrc="wiki"   onclick="cPickSrc(this)">&#128218; Wikipedia</button>
+      <button class="cbtn"    data-csrc="crypto" onclick="cPickSrc(this)">&#128176; Crypto</button>
+      <button class="cbtn"    data-csrc="weather"  onclick="cPickSrc(this)">&#127782; Weather</button>
+      <button class="cbtn"    data-csrc="disease"  onclick="cPickSrc(this)">&#128138; Disease</button>
+      <button class="cbtn"    data-csrc="hackernews" onclick="cPickSrc(this)">&#128248; Hacker News</button>
+      <button class="cbtn"    data-csrc="sunrise"  onclick="cPickSrc(this)">&#127749; Sunrise/Set</button>
+      <button class="cbtn"    data-csrc="webfile"  onclick="cPickSrc(this)">&#127758; Web Text File</button>
+    </div>
+    <div id="c-webfile-wrap" style="display:none;margin-top:10px">
+      <input type="text" id="c-webfile-url"
+        placeholder="https://yoursite.com/ticker.txt"
+        style="background:rgba(10,31,36,.9);border:1px solid var(--border);color:var(--cream);border-radius:6px;padding:9px 11px;font-size:13px;outline:none;width:100%;font-family:inherit"
+        oninput="cWebFileChanged()" />
+      <div style="font-size:11px;color:rgba(240,230,210,.4);margin-top:5px">
+        Direct URL to a .txt file — content will scroll as ticker
+      </div>
+    </div>
+    <div id="c-live-status" style="font-size:11px;color:rgba(0,255,255,.6);min-height:16px;margin-top:-8px"></div>
+  </div>
+
   <div class="btn-row">
     <button class="eliflar-btn" onclick="cGenerate()">&#9654; Compose Intro</button>
     <button class="act-btn" id="c-copy-btn" onclick="cCopy()" style="padding:13px 18px;font-size:13px">Copy HTML</button>
@@ -792,6 +921,153 @@ buildGallery();
 <script>
 /* ── COMPOSER ── */
 var cPos='top', cShape='circle', cSize='120px', cBg='blur', cBgSrc='portrait', cHtml='';
+var cSrc='none', cLiveText='';
+
+function cPickSrc(btn) {
+  document.querySelectorAll('[data-csrc]').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  cSrc = btn.getAttribute('data-csrc');
+  cLiveText = '';
+  var st   = document.getElementById('c-live-status');
+  var wrap = document.getElementById('c-webfile-wrap');
+  wrap.style.display = (cSrc === 'webfile') ? 'block' : 'none';
+  if (cSrc === 'none')    { st.textContent = ''; return; }
+  if (cSrc === 'webfile') { st.textContent = 'Enter URL above then click Compose'; return; }
+  st.textContent = 'Fetching...';
+  st.style.color = 'rgba(0,255,255,.6)';
+  fetchLiveData(cSrc, function(txt) {
+    cLiveText = txt;
+    st.textContent = txt ? '✓ ' + txt.substring(0,80) + (txt.length>80?'...':'') : '✘ No data received';
+    st.style.color = txt ? 'rgba(0,255,255,.7)' : 'rgba(255,100,100,.7)';
+  });
+}
+
+function cWebFileChanged() {
+  cLiveText = '';
+  document.getElementById('c-live-status').textContent = 'URL set — will fetch on Compose';
+  document.getElementById('c-live-status').style.color = 'rgba(255,200,50,.7)';
+}
+
+function fetchLiveData(src, cb) {
+  if (src === 'quake') {
+    fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var items = d.features.slice(0,5);
+        if (!items.length) { cb('No significant earthquakes this week'); return; }
+        var txt = items.map(function(f){
+          var m = f.properties.mag.toFixed(1);
+          var pl = f.properties.place || '';
+          return 'M'+m+' '+pl;
+        }).join('  •  ');
+        cb(txt);
+      }).catch(function(){ cb(''); });
+
+  } else if (src === 'iss') {
+    fetch('https://api.wheretheiss.at/v1/satellites/25544')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var lat = parseFloat(d.latitude).toFixed(2);
+        var lon = parseFloat(d.longitude).toFixed(2);
+        var spd = (parseFloat(d.velocity)*3.6).toFixed(0);
+        cb('ISS Position: Lat '+lat+'°  Lon '+lon+'°  Speed '+spd+' km/h  Alt '+parseFloat(d.altitude).toFixed(0)+' km');
+      }).catch(function(){ cb(''); });
+
+  } else if (src === 'wiki') {
+    var today = new Date();
+    var y = today.getFullYear();
+    var m = String(today.getMonth()+1).padStart(2,'0');
+    var d = String(today.getDate()).padStart(2,'0');
+    fetch('https://en.wikipedia.org/api/rest_v1/feed/featured/'+y+'/'+m+'/'+d)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var title = (data.tfa && data.tfa.titles && data.tfa.titles.normalized) || '';
+        var desc  = (data.tfa && data.tfa.description) || '';
+        cb(title ? 'Wikipedia Today: '+title+(desc?' — '+desc:'') : '');
+      }).catch(function(){ cb(''); });
+
+  } else if (src === 'crypto') {
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        function fmt(id, sym) {
+          var p = d[id]; if(!p) return '';
+          var ch = p.usd_24h_change ? (p.usd_24h_change>0?'+':'')+p.usd_24h_change.toFixed(1)+'%' : '';
+          return sym+' $'+p.usd.toLocaleString()+' ('+ch+')';
+        }
+        cb([fmt('bitcoin','₿ BTC'), fmt('ethereum','Ξ ETH'), fmt('solana','◎ SOL')].filter(Boolean).join('  •  '));
+      }).catch(function(){ cb(''); });
+
+  } else if (src === 'weather') {
+    if (!navigator.geolocation) { cb('Geolocation not supported'); return; }
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      var lat = pos.coords.latitude.toFixed(4);
+      var lon = pos.coords.longitude.toFixed(4);
+      fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,windspeed_10m,weathercode&wind_speed_unit=kmh')
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          var cur = d.current;
+          var temp = cur.temperature_2m;
+          var wind = cur.windspeed_10m;
+          var codes = {0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Fog',51:'Drizzle',53:'Drizzle',55:'Drizzle',61:'Rain',63:'Rain',65:'Heavy rain',71:'Snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Showers',82:'Heavy showers',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
+          var desc = codes[cur.weathercode] || 'Code '+cur.weathercode;
+          cb('Weather ('+lat+'°, '+lon+'°): '+desc+'  '+temp+'°C  Wind '+wind+' km/h');
+        }).catch(function(){ cb(''); });
+    }, function(){ cb('Location access denied'); });
+
+  } else if (src === 'disease') {
+    fetch('https://disease.sh/v3/covid-19/all')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var cases  = Number(d.cases).toLocaleString();
+        var deaths = Number(d.deaths).toLocaleString();
+        var rec    = Number(d.recovered).toLocaleString();
+        var today  = Number(d.todayCases).toLocaleString();
+        cb('COVID-19 Global: Cases '+cases+'  Deaths '+deaths+'  Recovered '+rec+'  Today +'+today);
+      }).catch(function(){ cb(''); });
+
+  } else if (src === 'hackernews') {
+    fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
+      .then(function(r){ return r.json(); })
+      .then(function(ids){
+        var top = ids.slice(0,5);
+        var results = [];
+        var done = 0;
+        top.forEach(function(id, i){
+          fetch('https://hacker-news.firebaseio.com/v0/item/'+id+'.json')
+            .then(function(r){ return r.json(); })
+            .then(function(item){
+              results[i] = (item.score ? '▲'+item.score+' ' : '') + item.title;
+              done++;
+              if(done === top.length){
+                cb(results.filter(Boolean).join('  •  '));
+              }
+            }).catch(function(){ done++; if(done===top.length) cb(results.filter(Boolean).join('  •  ')); });
+        });
+      }).catch(function(){ cb(''); });
+
+  } else if (src === 'sunrise') {
+    if (!navigator.geolocation) { cb('Geolocation not supported'); return; }
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      var lat = pos.coords.latitude.toFixed(4);
+      var lon = pos.coords.longitude.toFixed(4);
+      fetch('https://api.sunrise-sunset.org/json?lat='+lat+'&lng='+lon+'&formatted=0')
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          function fmtTime(iso){
+            var t = new Date(iso);
+            return t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+          }
+          var sr  = fmtTime(d.results.sunrise);
+          var ss  = fmtTime(d.results.sunset);
+          var day = d.results.day_length;
+          var h   = Math.floor(day/3600);
+          var m   = Math.floor((day%3600)/60);
+          cb('Sunrise '+sr+'  •  Sunset '+ss+'  •  Daylight '+h+'h '+m+'m  ('+lat+'°, '+lon+'°)');
+        }).catch(function(){ cb(''); });
+    }, function(){ cb('Location access denied'); });
+  }
+}
 
 function cPick(group, el) {
   var selectors = {'pos':'[data-cpos]','shape':'[data-cshape]','size':'[data-csize]','bg':'[data-cbg]','bgsrc':'[data-cbgsrc]'};
@@ -827,6 +1103,15 @@ function cGenerate() {
   var tema   = document.getElementById('c-tema').value.trim() || 'Topic';
   var user   = document.getElementById('c-user').value.trim() || 'Author';
   var imgUrl = document.getElementById('c-img').value.trim();
+  /* use fetched live text as ticker, or empty if none */
+  var liveTicker = '';
+  if (cSrc === 'webfile') {
+    /* webfile: inject fetch script into the generated HTML instead of static text */
+    var wfUrl = document.getElementById('c-webfile-url').value.trim();
+    if (wfUrl) liveTicker = '__WEBFILE__' + wfUrl;
+  } else if (cSrc !== 'none' && cLiveText) {
+    liveTicker = cLiveText;
+  }
 
   var flexDir = {top:'column',left:'row',right:'row-reverse',bottom:'column-reverse'}[cPos]||'column';
   var margin  = {top:'margin-bottom:-18px',left:'margin-right:-18px',right:'margin-left:-18px',bottom:'margin-top:-18px'}[cPos]||'';
@@ -879,6 +1164,7 @@ function cGenerate() {
     + '  <div class="tri"></div>\n'
     + '</div>\n'
     + (bgScript ? '<script>' + bgScript + '<\/script>\n' : '')
+    + (liveTicker ? buildTickerDiv(liveTicker,'#ffee50','bottom',-1) : '')
     + '</body>\n</html>';
 
   document.getElementById('c-frame').srcdoc = cHtml;
