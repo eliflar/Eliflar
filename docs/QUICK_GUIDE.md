@@ -4,7 +4,7 @@
 > This guide covers everything you need to start in under 2 minutes.
 
 ---
-
+## Create narrated tutorial videos without video editing!
 ## 🎛️ The Indicator (top-left)
 
 The small badge in the top-left corner is your control center.
