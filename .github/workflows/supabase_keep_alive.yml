@@ -1,0 +1,22 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    # Ова се извршува автоматски на секои 2 дена во 02:00 часот наутро UTC
+    - cron: '0 2 */2 * *'
+  
+  # Ова ни овозможува веднаш да го тестираме рачно преку копче
+  workflow_dispatch:
+
+jobs:
+  ping_supabase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Supabase Edge Function
+        run: |
+          curl -L -X POST "https://cnafqzycqjdjqogmuazp.supabase.co/functions/v1/keep-alive" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Content-Type: application/json" \
+          --data '{"name":"GitHub Actions Keep Alive"}'
