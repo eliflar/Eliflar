@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Eliflar is an Android app for creating narrated tutorial videos in one take — no timeline, no editor, no post-production.">
     <title>Eliflar - Create Narrated Videos Without Editing</title>
     <style>
         body { background-color: #1a2a2a; color: #e0b44a; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }
@@ -17,12 +18,17 @@
         .premium-badge { background: #e0b44a; color: #1a2a2a; padding: 4px 12px; border-radius: 4px; font-weight: bold; text-transform: uppercase; font-size: 0.8em; }
         .alert-box { background: rgba(224,180,74,0.1); border: 1px solid #e0b44a; padding: 15px; border-radius: 10px; margin: 20px 0; font-weight: bold; color: white; }
         .footer { text-align: center; padding: 50px; font-size: 0.9em; color: #666; }
+        .footer a { color: #999; text-decoration: none; }
+        .footer a:hover { color: #e0b44a; }
         strong { color: #e0b44a; }
         .license-text { font-size: 0.85em; color: #aaa; }
         .btn { display: inline-block; margin: 10px 8px; padding: 14px 28px; border-radius: 8px; font-size: 1em; font-weight: bold; text-decoration: none; transition: opacity .2s; }
         .btn-primary { background: #e0b44a; color: #1a2a2a; }
         .btn-secondary { background: transparent; color: #e0b44a; border: 2px solid #e0b44a; }
         .btn:hover { opacity: .85; }
+        .btn:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+        .section a { color: #e0b44a; }
+        .note { font-size: 0.9em; color: #aaa; }
     </style>
 </head>
 <body>
@@ -36,8 +42,9 @@
 
     <img src="EliflarOne900_1700.jpg" alt="Eliflar App Interface" class="hero-img">
 
+    <!-- CHANGED: Eliflar does not record the screen. It shows your images and you draw on them. -->
     <div class="alert-box">
-        🎬 Record your screen, explain while recording, and publish immediately.<br>
+        🎬 Show your images, explain while you draw on them, and publish immediately.<br>
         No timeline. No editor. No post-production.
     </div>
 
@@ -47,9 +54,10 @@
 
     <!-- Links -->
     <div style="margin: 30px 0;">
-        <a class="btn btn-primary" href="https://github.com/eliflar/Eliflar/blob/main/docs/QUICK_GUIDE.md" target="_blank">📖 Quick Guide</a>
-        <a class="btn btn-secondary" href="https://github.com/eliflar/Eliflar/blob/main/docs/MANUAL.md" target="_blank">📘 Full Manual</a>
-        <a class="btn btn-secondary" href="https://www.youtube.com/@eliflar" target="_blank">▶ YouTube</a>
+        <a class="btn btn-primary" href="#download">⬇ Download</a>
+        <a class="btn btn-secondary" href="https://github.com/eliflar/Eliflar/blob/main/docs/QUICK_GUIDE.md" target="_blank" rel="noopener">📖 Quick Guide</a>
+        <a class="btn btn-secondary" href="https://github.com/eliflar/Eliflar/blob/main/docs/MANUAL.md" target="_blank" rel="noopener">📘 Full Manual</a>
+        <a class="btn btn-secondary" href="https://www.youtube.com/@eliflar" target="_blank" rel="noopener">▶ YouTube</a>
     </div>
 
     <div class="section">
@@ -85,6 +93,20 @@
         </ul>
     </div>
 
+    <!-- NEW: a reviewer (and a real user) must be able to actually get the app. -->
+    <div class="section" id="download">
+        <h2>Download</h2>
+        <p>Eliflar is an <strong>Android app</strong>, distributed directly from GitHub — not through Google Play.</p>
+        <p>
+            <a class="btn btn-primary" href="https://github.com/eliflar/Eliflar/releases/latest" target="_blank" rel="noopener">⬇ Download the latest APK</a>
+        </p>
+        <p class="note">
+            Android will warn you about installing from an unknown source. This is normal for apps
+            distributed outside Google Play — allow the install to continue. The app is free to use;
+            Premium is optional.
+        </p>
+    </div>
+
     <div class="section">
         <h2><span class="premium-badge">Premium</span> Features</h2>
         <ul>
@@ -96,17 +118,68 @@
         </ul>
     </div>
 
-    <div class="section">
+    <div class="section" id="premium">
         <h2>Premium Access</h2>
-        <p><strong>Founder's Price: $5 USD</strong></p>
+        <p><strong>Founder's Price: $5 USD</strong> — one-time payment, lifetime access. No subscription.</p>
         <p>Unlock the complete Eliflar experience with premium intros, advanced options and future content packs.</p>
-        <p>Contact us for Premium activation.</p>
+
+        <p><strong>How it works</strong></p>
+        <ol>
+            <li>You pay once.</li>
+            <li>You receive an activation code by email (within 24 hours).</li>
+            <li>You enter the code in the app. Premium is unlocked on your device.</li>
+        </ol>
+
+        <!--
+          WHEN THE LEMON SQUEEZY CHECKOUT EXISTS:
+          replace the paragraph below with this button and delete the "email us" line.
+
+          <p><a class="btn btn-primary" href="PASTE_LEMON_SQUEEZY_CHECKOUT_URL_HERE">Get Premium — $5</a></p>
+        -->
+        <p>
+            To get Premium today, email
+            <a href="mailto:eliflarapp@gmail.com">eliflarapp@gmail.com</a>
+            and you will receive payment instructions and your activation code.
+        </p>
     </div>
 
     <div class="section">
         <h2>Personal Video Notebook</h2>
         <p>Eliflar can also be used together with Eliflar Hub to organize videos, notes, links and personal knowledge collections.</p>
         <p>Build your own library of explanations and reusable tutorials.</p>
+    </div>
+
+    <!-- NEW: required by Lemon Squeezy. They process refunds as Merchant of Record,
+         so the rule has to be written down somewhere public. -->
+    <div class="section" id="refunds">
+        <h2>Refund Policy</h2>
+        <p>Eliflar Premium is a digital product, delivered as an activation code.</p>
+        <ul>
+            <li>If your activation code does not work, we will replace it or refund you in full.</li>
+            <li>If you are not satisfied with Premium, email us within <strong>14 days</strong> of purchase and we will refund you in full.</li>
+            <li>To request a refund, email <a href="mailto:eliflarapp@gmail.com">eliflarapp@gmail.com</a> with your order number.</li>
+            <li>Refunds are processed within 5 working days.</li>
+        </ul>
+        <p class="note">The free version of Eliflar never expires, so you can test the app before buying Premium.</p>
+    </div>
+
+    <!-- NEW: required by Lemon Squeezy. Checkout collects an email + billing country. -->
+    <div class="section" id="privacy">
+        <h2>Privacy Policy</h2>
+        <p><strong>The app.</strong> Eliflar processes everything locally on your device. It does not access your gallery, private files or cloud storage, and it never uploads your images, recordings or videos anywhere.</p>
+        <p><strong>Premium activation.</strong> When you activate Premium, the app sends only your activation code to our provider (Supabase) to verify it. No personal data is sent.</p>
+        <p><strong>Purchases.</strong> Payments are processed by Lemon Squeezy, which acts as the seller of record. Lemon Squeezy collects your email address and billing country in order to process the payment and the applicable VAT. We receive your email address only in order to send you your activation code. We do not sell or share your data with anyone else.</p>
+        <p><strong>Your data.</strong> To request a copy of your data or its deletion, email <a href="mailto:eliflarapp@gmail.com">eliflarapp@gmail.com</a>.</p>
+    </div>
+
+    <!-- NEW: a reviewer looks for this first. A page with no contact is rejected. -->
+    <div class="section" id="contact">
+        <h2>Contact</h2>
+        <p>
+            Email: <a href="mailto:eliflarapp@gmail.com">eliflarapp@gmail.com</a><br>
+            Boris Sekirarski · North Macedonia
+        </p>
+        <p class="note">We reply within 48 hours.</p>
     </div>
 
     <div class="section">
@@ -118,11 +191,19 @@
                 <li><strong>Usage:</strong> Licensed for personal and commercial video creation.</li>
                 <li><strong>Restrictions:</strong> Reverse engineering or redistribution of the APK is not permitted without written permission.</li>
                 <li><strong>Disclaimer:</strong> The software is provided "as is" without warranties.</li>
+                <li><strong>Premium licence:</strong> An activation code is licensed to one buyer. Sharing or reselling codes is not permitted.</li>
             </ul>
         </div>
     </div>
 
     <div class="footer">
+        <p>
+            <a href="#download">Download</a> ·
+            <a href="#premium">Premium</a> ·
+            <a href="#refunds">Refunds</a> ·
+            <a href="#privacy">Privacy</a> ·
+            <a href="#contact">Contact</a>
+        </p>
         © 2026 eliflar.app | Developed by Boris Sekirarski | North Macedonia
     </div>
 
